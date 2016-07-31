@@ -84,15 +84,19 @@ public class InstanceRS extends RestFeature {
 
 	@PUT
 	@Path("/{entity}/{id}")
-	public Response update(@PathParam("entity") String entity, @PathParam("id") String id, @FormParam("instanceJson") String instanceJson) {
+	public Response update(@PathParam("entity") String entity, @PathParam("id") String id, @FormParam("instance") String instanceJson) {
 		IdRef<Entity> entityId = yawp(Entity.class).where("name", "=", entity).onlyId();
 		if (entityId == null) {
+			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
+		}
+		
+		if (StringUtils.isEmpty(instanceJson)) {
 			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
 		}
 
 		Instance instance = yawp(Instance.class).where("entityId", "=", entityId).and("id", "=", id).only();
 		instance.object = new JsonParser().parse(instanceJson).getAsJsonObject();
-		return Response.ok().entity(new Gson().toJson(yawp.save(instance))).build();
+		return Response.ok().entity(new Gson().toJson(yawp.save(instance).object)).build();
 	}
 
 	@DELETE

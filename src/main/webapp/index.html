@@ -120,14 +120,24 @@
 					$(newLine(instance)).insertBefore($('#entity-table tbody tr:last'));
 				});
 			}).on('click','.edit-line',function() {
-				var newLine = '<tr>',
-					header = $('#entity-table thead > tr > td:not(:last-child)'),
-					columnNumber = 0;
+				var header = $('#entity-table thead > tr > td:not(:last-child)'),
+					columnNumber = 0,
+					newObject = {},
+					tds = $(this).parents('tr').find('td input');
 				header.each(function() {
-					newLine += '<td><input value="' + (instance[$(this).text()] || '') + '" ' + ($(this).text() == 'id' ? 'disabled="disabled"' : '') + '"/></td>';
+					newObject[$(this).text()] = tds.eq(columnNumber++).val();
 				});
-				newLine += '<td><button class="edit-line">Salvar</button><button class="remove-line">Remove</button></td>';
-				return newLine + '</tr>';
+				console.info(newObject);
+				$.ajax({
+					type:'PUT',
+					url: '/api/' + selectedTable.name + '/' + newObject.id,
+					dataType: 'json',
+					data : {
+						instance: JSON.stringify(newObject)
+					}
+				}).done(function() {
+					console.info('uhul');
+				});
 			}).on('click','.remove-line',function() {
 				var tr = $(this).parents('tr');
 				$.ajax({
