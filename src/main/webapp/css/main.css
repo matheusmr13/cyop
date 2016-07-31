@@ -1,0 +1,15 @@
+table {
+	width: 100%;
+}
+
+table thead td {
+	font-weight: bold;
+	background-color: black;
+	color: white;
+}
+table tbody td:nth-child(n+1) {
+	background-color: #CCC;
+}
+table td {
+	border-spacing: 10px;
+}

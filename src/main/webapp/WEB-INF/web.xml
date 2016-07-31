@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<servlet>
+		<servlet-name>EndpointServlet</servlet-name>
+		<servlet-class>io.yawp.servlet.EndpointServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EndpointServlet</servlet-name>
+		<url-pattern>/protected/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EndpointServlet</servlet-name>
+		<url-pattern>/protected/_tasks/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>EndpointFixturesServlet</servlet-name>
+		<servlet-class>io.yawp.servlet.FixturesServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EndpointFixturesServlet</servlet-name>
+		<url-pattern>/fixtures/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ToolsServlet</servlet-name>
+		<servlet-class>io.yawp.tools.ToolsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ToolsServlet</servlet-name>
+		<url-pattern>/_ah/yawp/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Resteasy</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>javax.ws.rs.core.Application</param-name>
+			<param-value>br.com.saasapi.Application</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Resteasy</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

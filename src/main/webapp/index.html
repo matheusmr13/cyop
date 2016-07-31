@@ -1,0 +1,144 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+	<div style="width: 30%; display:inline-block;">
+		<input name="entity-name" />
+		<button id="new-entity">Criar entidade</button>
+
+		<ul id="entities">
+		</ul>
+	</div>
+	<div style="width: 70%; display:inline-block;">
+		<h1>Tabela selecionada:<span id="selected-table"></span></h1>
+		<table id="entity-table">
+			<thead>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<script src="js/jquery-3.0.0.min.js"></script>
+	<script src="js/yawp.js"></script>
+	<script>
+		$(document).ready(function() {
+			var loadedEntities = {};
+			var selectedTable;
+			var buttons = '<button class="edit-entity">Editar</button><button class="remove-entity">Remover</button>';
+			var select = '<select>' +
+				'<option value="INTEGER">Inteiro</option>' +
+				'<option value="STRING">String</option>' +
+				'<option value="TEXT">Texto</option>' +
+				'<option value="DECIMAL">Decimal</option>' +
+				'<option value="BOOLEAN">Boolean</option>' +
+				'</select>';
+			var getLi = function(entity) {
+				return '<li data-id="' + entity.id + '"><span class="entity-name">' + entity.name + '</span>' + buttons + '</li>';
+			};
+			yawp('/entities').list(function(entities) {
+				var list = '';
+				loadedEntities = {};
+				for (var i = 0; i < entities.length; i++) {
+					list += getLi(entities[i]);
+					loadedEntities[entities[i].id] = entities[i];
+				}
+				$('#entities').html(list);
+			});
+
+			$('#new-entity').click(function() {
+				yawp('/entities').create({
+					name: $('[name="entity-name"]').val()
+				}).done(function(entity) {
+					loadedEntities[entity.id] = entity;
+					$('#entities').append(getLi(entity));
+				});
+			});
+			$('#entities').on('click', '.edit-entity', function() {
+				var li = $(this).parent(),
+					id = li.data('id');
+				selectedTable = loadedEntities[id];
+				$('#selected-table').html(li.find('.entity-name').text());
+				var columns = selectedTable.properties || [];
+				var columnsText = '<tr>';
+				for (var i = 0; i < columns.length; i++) {
+					columnsText += '<td>' + columns[i].name + '</td>';
+				}
+				columnsText += '<td><input class="column-name" placeholder="Nome da coluna"/>' +
+					'<input class="column-default" placeholder="Valor default"/>' +
+					'' + select + '<button class="add-column">+</button></td></tr>';
+				$('#entity-table thead').html(columnsText);
+
+				$.ajax({
+					type: 'GET',
+					url: '/api/' + selectedTable.name,
+					dataType: 'json'
+				}).done(function(instances) {
+					var table = $('#entity-table tbody');
+					var lines = '';
+					for (var i = 0; i < instances.length; i++) {
+						lines += newLine(instances[i]);
+						console.info(lines);
+					}
+					lines += '<tr><td colspan="' + (columns.length + 1) + '"><button class="add-line">+</button></td></tr>';
+					table.html(lines);
+				});
+			}).on('click', '.remove-entity', function() {
+				var li = $(this).parents('li');
+				yawp(li.data('id')).destroy();
+				li.remove();
+			});
+
+			var newLine = function(instance) {
+				var newLine = '<tr>',
+					header = $('#entity-table thead > tr > td:not(:last-child)');
+				header.each(function() {
+					newLine += '<td><input value="' + (instance[$(this).text()] || '') + '" ' + ($(this).text() == 'id' ? 'disabled="disabled"' : '') + '"/></td>';
+				});
+				newLine += '<td><button class="edit-line">Salvar</button><button class="remove-line">Remove</button></td>';
+				return newLine + '</tr>';
+			};
+			$('#entity-table').on('click', '.add-column', function() {
+				selectedTable.properties = selectedTable.properties || [];
+				selectedTable.properties.push({
+					type: $(this).parent().find('select').val(),
+					name: $(this).parent().find('.column-name').val(),
+					defaultValue: $(this).parent().find('.column-default').val()
+				});
+				yawp(selectedTable.id).update(selectedTable).done(function(updatedEntity) {
+					loadedEntities[selectedTable.id] = updatedEntity;
+					$('li[data-id="' + updatedEntity.id + '"] .edit-entity').click();
+				});
+			}).on('click', '.add-line', function() {
+				$.ajax({
+					url: '/api/' + selectedTable.name,
+					type: 'POST',
+					data: {}
+				}).done(function(instance) {
+					$(newLine(instance)).insertBefore($('#entity-table tbody tr:last'));
+				});
+			}).on('click','.edit-line',function() {
+				var newLine = '<tr>',
+					header = $('#entity-table thead > tr > td:not(:last-child)'),
+					columnNumber = 0;
+				header.each(function() {
+					newLine += '<td><input value="' + (instance[$(this).text()] || '') + '" ' + ($(this).text() == 'id' ? 'disabled="disabled"' : '') + '"/></td>';
+				});
+				newLine += '<td><button class="edit-line">Salvar</button><button class="remove-line">Remove</button></td>';
+				return newLine + '</tr>';
+			}).on('click','.remove-line',function() {
+				var tr = $(this).parents('tr');
+				$.ajax({
+					type:'DELETE',
+					url: '/api/' + selectedTable.name + '/' + tr.find('td:first-child input').val()
+				}).done(function() {
+					tr.remove();
+				})
+			});
+		});
+	</script>
+</body>
+
+</html>
