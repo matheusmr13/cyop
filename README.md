@@ -42,5 +42,5 @@
 2. Add columns to your endpoint (eg: name, username, email);
 3. Choose your columns type (eg: Integer, String, BigDecimal);
 4. Add data to your endpoint (eg: {name: 'Matheus', username: 'matheusmr13'});
-  * You can use the created api links or insert on at the platform.
+  * You can use the created api links or insert it at the platform.
 5. That's all folks (:
