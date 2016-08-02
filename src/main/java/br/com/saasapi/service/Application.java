@@ -13,6 +13,7 @@ public class Application extends javax.ws.rs.core.Application {
 
 		classes.add(InstanceRS.class);
 
+		classes.add(NotFoundExceptionMapper.class);
 		classes.add(ExceptionMapper.class);
 		return classes;
 	}

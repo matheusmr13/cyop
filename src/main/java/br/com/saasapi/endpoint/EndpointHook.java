@@ -10,12 +10,12 @@ public class EndpointHook extends Hook<Endpoint> {
 	public void beforeSave(Endpoint entity) {
 		if (entity.getId() == null) {
 			Propertie idPropertie = new Propertie();
-			idPropertie.setName("id");
-			idPropertie.setType(PropertieType.INTEGER);
-			if (entity.getProperties() == null) {
-				entity.setProperties(new ArrayList<Propertie>());
+			idPropertie.name = "id";
+			idPropertie.type = PropertieType.INTEGER;
+			if (entity.properties == null) {
+				entity.properties = new ArrayList<Propertie>();
 			}
-			entity.getProperties().add(idPropertie);
+			entity.properties.add(idPropertie);
 		}
 	}
 

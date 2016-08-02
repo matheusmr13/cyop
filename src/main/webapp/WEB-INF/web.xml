@@ -39,7 +39,7 @@
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.core.Application</param-name>
-			<param-value>br.com.saasapi.Application</param-value>
+			<param-value>br.com.saasapi.service.Application</param-value>
 		</init-param>
 	</servlet>
 
