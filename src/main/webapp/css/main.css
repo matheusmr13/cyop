@@ -12,10 +12,13 @@
 
 nav,
 .btn,
+.btn-floating,
+.collection .collection-item.active,
 .btn-large {
 	background-color: #0ab0d9;
 }
 
+.btn-floating:hover,
 .btn-large:hover,
 .btn:hover {
 	background-color: #09b8e4;
@@ -37,9 +40,39 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
 }
 #content,
 .panel {
-	min-height: calc(100vh - 64px);
+	height: calc(100vh - 64px);
 	margin-bottom: 0;
+}
+.panel {
+	overflow-y: auto;
+}
+table div,
+table input {
+	margin: 0 !important;
+}
+
+table td,
+table th {
+	min-width: 200px;
+	padding: 10px 10px 5px 10px;
+}
+table td:first-child,
+table th:first-child {
+	min-width: 50px;
+}
+table {
+	margin-top: 10px;
+}
+table th:last-child {
+	min-width: 500px;
+}
+
+.panel.left-panel {
 	-webkit-box-shadow: -15px 2px 17px 14px rgba(0,0,0,0.75);
 	-moz-box-shadow: -15px 2px 17px 14px rgba(0,0,0,0.75);
 	box-shadow: -15px 2px 17px 14px rgba(0,0,0,0.75);
+}
+
+.margin-left {
+	margin-left: 5px;
 }

@@ -24,7 +24,7 @@
 					<label for="entity-name">Endpoint Name</label>
 				</div>
 				<div class="input-field col s2 floating-button-container">
-					<a class="btn-floating btn-large waves-effect waves-light red" id="new-entity"><i class="material-icons">add</i></a>
+					<a class="btn-floating waves-effect waves-light" id="new-entity"><i class="material-icons">add</i></a>
 				</div>
 				<div class="col s12">
 					<h4>Endpoints</h4>
@@ -33,13 +33,20 @@
 				</div>
 			</div>
 		</form>
-		<form class="col s8">
-			<table id="entity-table" class="bordered highlight">
-				<thead>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+		<form class="col s8 panel">
+			<div class="row">
+				<table id="entity-table" class="bordered striped">
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="row">
+				<div class="col s12 center">
+					<a class="btn-floating waves-effect waves-light add-line"><i class="material-icons">add</i></a>
+				</div>
+			</div>
 		</form>
 		<script src="js/jquery-3.0.0.min.js"></script>
 		<script src="js/yawp.js"></script>
@@ -48,13 +55,6 @@
 			$(document).ready(function() {
 				var loadedEntities = {};
 				var selectedTable;
-				var select = '<select>' +
-					'<option value="INTEGER">Inteiro</option>' +
-					'<option value="STRING">String</option>' +
-					'<option value="TEXT">Texto</option>' +
-					'<option value="DECIMAL">Decimal</option>' +
-					'<option value="BOOLEAN">Boolean</option>' +
-					'</select>';
 				var getLi = function(entity) {
 					return '<li class="collection-item" data-id="' + entity.id + '">' +
 						'<div><span class="entity-name">' + entity.name + '</span>' +
@@ -62,20 +62,65 @@
 						'<a href="#!" class="secondary-content edit-endpoint"><i class="material-icons">edit</i></a>' +
 						'</div>';
 				};
-				var getHeaderColumn = function(entity) {
-					return '';
+				var getHeaderColumn = function(column) {
+					var isId = (column.name == 'id');
+					return '<th>' +
+					 			'<div class="row">' +
+									'<span>' + column.name + '</span>' +
+									(!isId ?
+										'<a class="btn-floating-small waves-effect waves-light edit-column margin-left"><i class="material-icons">edit</i></a>' +
+										'<a class="btn-floating-small waves-effect waves-light remove-column margin-left"><i class="material-icons">delete</i></a>'
+										:
+										''
+									) +
+								'</div>'
+							'</th>';
 				};
-				var getHeaderActions = function(entity) {
-					return '';
+				var getHeaderActions = function() {
+					return '<th>' +
+							'<div class="row new-column">' +
+								'<div class="input-field col s5">' +
+									'<input id="column-name" type="text" class="validate"/>' +
+									'<label for="column-name">Column Name</label>' +
+								'</div>' +
+								'<div class="input-field col s5">'+
+									'<select id="column-type">'+
+										'<option value="INTEGER">Integer</option>' +
+										'<option value="STRING">String</option>' +
+										'<option value="TEXT">Text</option>' +
+										'<option value="DECIMAL">Decimal</option>' +
+										'<option value="BOOLEAN">Boolean</option>' +
+									'</select>'+
+									'<label>Materialize Select</label>'+
+								'</div>' +
+								'<div class="input-field col s2">' +
+									'<a class="btn-floating waves-effect waves-light add-column"><i class="material-icons">add</i></a>' +
+								'</div>'+
+							'</div>' +
+						'</th>';
 				};
 				var getTableColumn = function(entity, column) {
+					var isId = (column == 'id'),
+						elementId = (entity.id + column);
+					return '<th>' +
+							'<div class="row">' +
+								'<div class="input-field col s12">' +
+									( !isId ?
+										'<input id="' + elementId +'" type="text" value="' + (entity[column] || '') + '" />' +
+										'<label for="' + elementId +'">' + column + '</label>'
+										:
+										'<span>' + entity[column] + '</span>'
+									) +
+								'</div>' +
+							'</div>' +
+						'</th>';
 					return '<td><input value="' + (entity[column] || '') + '" ' + (column == 'id' ? 'disabled="disabled"' : '') + '"/></td>';
 				};
 				var getTableActions = function() {
-					return '<td><button class="edit-line">Salvar</button><button class="remove-line">Remove</button></td>';
-				};
-				var getTableAddLine = function(colspan) {
-					return '<tr><td colspan="' + colspan + '" class="centered"><a class="btn-floating btn-large waves-effect waves-light red add-line"><i class="material-icons">add</i></a></td></tr>';
+					return '<td class="center">'+
+								'<a class="btn-floating waves-effect waves-light edit-line"><i class="material-icons">save</i></a>' +
+								'<a class="btn-floating waves-effect waves-light remove-line margin-left"><i class="material-icons">delete</i></a>' +
+							'</td>';
 				};
 				yawp('/entities').list(function(entities) {
 					var list = '';
@@ -103,16 +148,15 @@
 				$('#entities').on('click', '.edit-endpoint', function() {
 					var li = $(this).parents('li'),
 						id = li.data('id');
+					li.addClass('active').siblings().removeClass('active');
 					selectedTable = loadedEntities[id];
 					$('#selected-table').html(li.find('.entity-name').text());
 					var columns = selectedTable.properties || [];
 					var columnsText = '<tr>';
 					for (var i = 0; i < columns.length; i++) {
-						columnsText += '<th>' + columns[i].name + '</th>';
+						columnsText += getHeaderColumn(columns[i]);
 					}
-					columnsText += '<td> <div class="row"><input class="column-name s4"/>' +
-						'<input class="column-default  s4"/>' +
-						'' + select + '<button class="add-column">+</button></div></td></tr>';
+					columnsText += getHeaderActions() + '</tr>';
 					$('#entity-table thead').html(columnsText);
 
 					$.ajax({
@@ -125,9 +169,9 @@
 						for (var i = 0; i < instances.length; i++) {
 							lines += newLine(instances[i]);
 						}
-						lines += getTableAddLine(columns.length + 1);
 						table.html(lines);
 					});
+					$('select').material_select();
 				}).on('click', '.remove-endpoint', function() {
 					var li = $(this).parents('li');
 					yawp(li.data('id')).destroy();
@@ -136,7 +180,7 @@
 
 				var newLine = function(instance) {
 					var newLine = '<tr>',
-						header = $('#entity-table thead > tr > td:not(:last-child)');
+						header = $('#entity-table thead > tr > th:not(:last-child)');
 					header.each(function() {
 						newLine += getTableColumn(instance, $(this).text());
 					});
@@ -146,9 +190,9 @@
 				$('#entity-table').on('click', '.add-column', function() {
 					selectedTable.properties = selectedTable.properties || [];
 					selectedTable.properties.push({
-						type: $(this).parent().find('select').val(),
-						name: $(this).parent().find('.column-name').val(),
-						defaultValue: $(this).parent().find('.column-default').val()
+						type: $('#column-type').val(),
+						name: $('#column-name').val(),
+						defaultValue: $('#column-default').val()
 					});
 					yawp(selectedTable.id).update(selectedTable).done(function(updatedEntity) {
 						loadedEntities[selectedTable.id] = updatedEntity;
