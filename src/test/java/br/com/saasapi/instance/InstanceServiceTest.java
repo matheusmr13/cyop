@@ -11,6 +11,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gson.JsonObject;
+
 import br.com.saasapi.endpoint.Endpoint;
 import br.com.saasapi.endpoint.Propertie;
 import br.com.saasapi.endpoint.PropertieType;
@@ -81,16 +83,59 @@ public class InstanceServiceTest extends EndpointTestCaseBase {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void updateInstanceIdWithoutEndpointTest() {
+	public void updateInstanceWithoutEndpointTest() {
 		InstanceService feature = feature(InstanceService.class);
 		feature.createInstance("foo", "{\"bar\":\"Matheus\"}");
 		feature.updateInstance("bar", "1", "{}");
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void updateInstanceIdWithoutExistingIdTest() {
+	public void updateInstanceWithoutExistingIdTest() {
 		InstanceService feature = feature(InstanceService.class);
 		feature.createInstance("foo", "{\"bar\":\"Matheus\"}");
 		feature.updateInstance("foo", "2", "{}");
+	}
+
+	@Test
+	public void deleteInstanceTest() {
+		InstanceService feature = feature(InstanceService.class);
+		feature.createInstance("foo", "{\"bar\":\"Matheus\"}");
+
+		feature.deleteEntity("foo", "1");
+		Instance instance = yawp(Instance.class).first();
+		assertEquals(null, instance);
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void deleteInstanceWithoutEndpointTest() {
+		InstanceService feature = feature(InstanceService.class);
+		feature.createInstance("foo", "{\"bar\":\"Matheus\"}");
+		feature.deleteEntity("bar", "1");
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void deleteInstanceWithoutExistingIdTest() {
+		InstanceService feature = feature(InstanceService.class);
+		feature.createInstance("foo", "{\"bar\":\"Matheus\"}");
+		feature.deleteEntity("foo", "2");
+	}
+
+	@Test
+	public void listInstancesTest() {
+		InstanceService feature = feature(InstanceService.class);
+		feature.createInstance("foo", "{\"bar\":\"Matheus\"}");
+		feature.createInstance("foo", "{\"bar\":\"Joao\"}");
+		feature.createInstance("foo", "{\"bar\":\"Filipe\"}");
+		feature.createInstance("foo", "{\"bar\":\"Matheus M\"}");
+
+		List<JsonObject> listOfInstance = feature.getListOfInstance("foo");
+		assertEquals(4, listOfInstance.size());
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void listInstancesWithoutEndpointTest() {
+		InstanceService feature = feature(InstanceService.class);
+		feature.createInstance("foo", "{\"bar\":\"Matheus\"}");
+		feature.getListOfInstance("bar");
 	}
 }
