@@ -49,7 +49,7 @@ public class InstanceRS extends RestFeature {
 			}
 		}
 		instance.object.addProperty("id", instance.id);
-		
+
 		yawp.save(entity);
 		return Response.ok().entity(new Gson().toJson(yawp.save(instance).object)).build();
 	}

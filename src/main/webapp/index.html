@@ -182,7 +182,7 @@
 					var newLine = '<tr>',
 						header = $('#entity-table thead > tr > th:not(:last-child)');
 					header.each(function() {
-						newLine += getTableColumn(instance, $(this).text());
+						newLine += getTableColumn(instance, $(this).find('span').text());
 					});
 					newLine += getTableActions();
 					return newLine + '</tr>';
@@ -197,14 +197,6 @@
 					yawp(selectedTable.id).update(selectedTable).done(function(updatedEntity) {
 						loadedEntities[selectedTable.id] = updatedEntity;
 						$('li[data-id="' + updatedEntity.id + '"] .edit-entity').click();
-					});
-				}).on('click', '.add-line', function() {
-					$.ajax({
-						url: '/api/' + selectedTable.name,
-						type: 'POST',
-						data: {}
-					}).done(function(instance) {
-						$(newLine(instance)).insertBefore($('#entity-table tbody tr:last'));
 					});
 				}).on('click', '.edit-line', function() {
 					var header = $('#entity-table thead > tr > td:not(:last-child)'),
@@ -232,7 +224,17 @@
 					}).done(function() {
 						tr.remove();
 					})
-				});
+				}).parents('.panel').on('click', '.add-line', function() {
+					$.ajax({
+						url: '/api/' + selectedTable.name,
+						type: 'POST',
+						data: {},
+						dataType: 'json'
+					}).done(function(instance) {
+						console.info(instance);
+						$('#entity-table tbody').append(newLine(instance));
+					});
+				})
 			});
 		</script>
 </body>
