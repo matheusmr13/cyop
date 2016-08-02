@@ -33,4 +33,11 @@ public class Endpoint {
 		return maxId;
 	}
 
+	public static Endpoint create(String name, List<Propertie> properties) {
+		Endpoint endpoint = new Endpoint();
+		endpoint.name = name;
+		endpoint.properties = properties;
+		endpoint.maxId = 0;
+		return endpoint;
+	}
 }

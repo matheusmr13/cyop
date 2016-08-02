@@ -16,4 +16,11 @@ public class Propertie {
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
+
+	public static Propertie create(String name, PropertieType type) {
+		Propertie propertie = new Propertie();
+		propertie.name = name;
+		propertie.type = type;
+		return propertie;
+	}
 }

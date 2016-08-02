@@ -43,4 +43,20 @@ public class Instance {
 		}
 		this.object.addProperty("id", this.id);
 	}
+
+	public IdRef<Instance> getYawpId() {
+		return yawpId;
+	}
+
+	public IdRef<Endpoint> getEntityId() {
+		return entityId;
+	}
+
+	public JsonObject getObject() {
+		return object;
+	}
+
+	public String getId() {
+		return id;
+	}
 }

@@ -55,9 +55,6 @@ public class InstanceService extends Feature {
 	public Instance getInstanceById(String entityName, String id) {
 		validateField(entityName);
 		Instance instance = findInstanceById(getEndpoint(entityName), id);
-		if (instance == null) {
-			throw new NotFoundException();
-		}
 		return instance;
 	}
 
@@ -82,7 +79,11 @@ public class InstanceService extends Feature {
 	}
 
 	private Instance findInstanceById(Endpoint entity, String id) {
-		return yawp(Instance.class).where("entityId", "=", entity.getId()).and("id", "=", id).first();
+		Instance first = yawp(Instance.class).where("entityId", "=", entity.getId()).and("id", "=", id).first();
+		if (first == null) {
+			throw new NotFoundException();
+		}
+		return first;
 	}
 
 	private Endpoint getEndpoint(String entityName) {
