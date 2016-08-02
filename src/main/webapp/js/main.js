@@ -82,10 +82,7 @@ $(document).ready(function() {
 			columnNumber = 0,
 			newObject = {},
 			tds = $(this).parents('tr').find('td input, td span');
-		console.info(tds);
 		header.each(function(i) {
-			console.info(i);
-			console.info(tds.eq(0));
 			if (!i) {
 				newObject.id = tds.eq(columnNumber++).text();
 			} else {
@@ -101,7 +98,6 @@ $(document).ready(function() {
 				instance: JSON.stringify(newObject)
 			}
 		}).done(function() {
-			console.info('uhul');
 		});
 	}).on('click', '.remove-line', function() {
 		var tr = $(this).parents('tr');
@@ -118,7 +114,6 @@ $(document).ready(function() {
 			data: {},
 			dataType: 'json'
 		}).done(function(instance) {
-			console.info(instance);
 			$('#entity-table tbody').append(SAASAPI.Template.newLine(instance));
 		});
 	});
