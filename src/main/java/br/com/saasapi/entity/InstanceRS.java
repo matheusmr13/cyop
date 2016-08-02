@@ -1,4 +1,4 @@
-package br.com.saasapi;
+package br.com.saasapi.entity;
 
 import io.yawp.repository.IdRef;
 
@@ -17,6 +17,10 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 
+import br.com.saasapi.endpoint.Endpoint;
+import br.com.saasapi.endpoint.Propertie;
+import br.com.saasapi.service.RestFeature;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,23 +33,24 @@ public class InstanceRS extends RestFeature {
 	@Path("/{entity}")
 	public Response create(@PathParam("entity") String entityName, @FormParam("instanceJson") String instanceJson) {
 		Instance instance = new Instance();
-		Entity entity = yawp(Entity.class).where("name", "=", entityName).only();
+		Endpoint entity = yawp(Endpoint.class).where("name", "=", entityName).only();
 		if (entity == null) {
-			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
+			return Response.status(HttpStatus.SC_NOT_FOUND).build();
 		}
 
-		instance.id = (++entity.maxId).toString();
-		instance.entityId = entity.id;
+		entity.setMaxId(entity.getMaxId() + 1);
+		instance.id = entity.getMaxId().toString();
+		instance.entityId = entity.getId();
 
 		if (StringUtils.isEmpty(instanceJson)) {
 			instance.object = new JsonObject();
 		} else {
 			instance.object = new JsonParser().parse(instanceJson).getAsJsonObject();
 		}
-		for (Propertie propertie : entity.properties) {
-			JsonElement propertieJson = instance.object.get(propertie.name);
-			if (propertieJson == null && propertie.defaultValue != null) {
-				instance.object.addProperty(propertie.name, propertie.defaultValue.toString());
+		for (Propertie propertie : entity.getProperties()) {
+			JsonElement propertieJson = instance.object.get(propertie.getName());
+			if (propertieJson == null && propertie.getDefaultValue() != null) {
+				instance.object.addProperty(propertie.getName(), propertie.getDefaultValue().toString());
 			}
 		}
 		instance.object.addProperty("id", instance.id);
@@ -57,12 +62,12 @@ public class InstanceRS extends RestFeature {
 	@GET
 	@Path("/{entity}")
 	public Response list(@PathParam("entity") String entityName) {
-		Entity entity = yawp(Entity.class).where("name", "=", entityName).first();
+		Endpoint entity = yawp(Endpoint.class).where("name", "=", entityName).first();
 		if (entity == null) {
-			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
+			return Response.status(HttpStatus.SC_NOT_FOUND).build();
 		}
 
-		List<Instance> instancies = yawp(Instance.class).where("entityId", "=", entity.id).list();
+		List<Instance> instancies = yawp(Instance.class).where("entityId", "=", entity.getId()).list();
 		List<JsonObject> instanciesObjects = new ArrayList<JsonObject>(instancies.size());
 		for (Instance instance : instancies) {
 			instanciesObjects.add(instance.object);
@@ -73,9 +78,9 @@ public class InstanceRS extends RestFeature {
 	@GET
 	@Path("/{entity}/{id}")
 	public Response fetch(@PathParam("entity") String entity, @PathParam("id") String id) {
-		IdRef<Entity> entityId = yawp(Entity.class).where("name", "=", entity).onlyId();
+		IdRef<Endpoint> entityId = yawp(Endpoint.class).where("name", "=", entity).onlyId();
 		if (entityId == null) {
-			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
+			return Response.status(HttpStatus.SC_NOT_FOUND).build();
 		}
 
 		Instance instance = yawp(Instance.class).where("entityId", "=", entityId).and("id", "=", id).only();
@@ -85,13 +90,13 @@ public class InstanceRS extends RestFeature {
 	@PUT
 	@Path("/{entity}/{id}")
 	public Response update(@PathParam("entity") String entity, @PathParam("id") String id, @FormParam("instance") String instanceJson) {
-		IdRef<Entity> entityId = yawp(Entity.class).where("name", "=", entity).onlyId();
+		IdRef<Endpoint> entityId = yawp(Endpoint.class).where("name", "=", entity).onlyId();
 		if (entityId == null) {
-			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
+			return Response.status(HttpStatus.SC_NOT_FOUND).build();
 		}
-		
+
 		if (StringUtils.isEmpty(instanceJson)) {
-			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
+			return Response.status(HttpStatus.SC_NOT_FOUND).build();
 		}
 
 		Instance instance = yawp(Instance.class).where("entityId", "=", entityId).and("id", "=", id).only();
@@ -102,12 +107,12 @@ public class InstanceRS extends RestFeature {
 	@DELETE
 	@Path("/{entity}/{id}")
 	public Response delete(@PathParam("entity") String entityName, @PathParam("id") String id) {
-		Entity entity = yawp(Entity.class).where("name", "=", entityName).first();
+		Endpoint entity = yawp(Endpoint.class).where("name", "=", entityName).first();
 		if (entity == null) {
-			return Response.status(HttpStatus.SC_FAILED_DEPENDENCY).build();
+			return Response.status(HttpStatus.SC_NOT_FOUND).build();
 		}
 
-		Instance instance = yawp(Instance.class).where("entityId", "=", entity.id).and("id", "=", id).only();
+		Instance instance = yawp(Instance.class).where("entityId", "=", entity.getId()).and("id", "=", id).only();
 		yawp.destroy(instance.yawpId);
 		return Response.ok().entity(new Gson().toJson(instance.object)).build();
 	}

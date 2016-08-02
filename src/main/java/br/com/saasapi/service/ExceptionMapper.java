@@ -1,4 +1,4 @@
-package br.com.saasapi;
+package br.com.saasapi.service;
 
 import javax.ws.rs.core.Response;
 

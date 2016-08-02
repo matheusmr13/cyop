@@ -1,4 +1,4 @@
-package br.com.saasapi;
+package br.com.saasapi.service;
 
 import io.yawp.repository.Feature;
 import io.yawp.repository.Repository;

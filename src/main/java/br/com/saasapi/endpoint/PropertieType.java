@@ -1,4 +1,4 @@
-package br.com.saasapi;
+package br.com.saasapi.endpoint;
 
 import java.math.BigDecimal;
 
