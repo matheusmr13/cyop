@@ -20,15 +20,15 @@
 
 ## Frameworks
 
-*Backend:
- *Google App Engine ([reason](https://cloud.google.com/why-google/));
- *Yawp! ([reason](http://yawp.io/) on "feature" part);
- *RESTeasy (Because yawp does not support {PathParams}, used to create a custom api).
+ * Backend:
+  * Google App Engine ([reason](https://cloud.google.com/why-google/));
+  * Yawp! ([reason](http://yawp.io/) on "feature" part);
+  * RESTeasy (Because yawp does not support {PathParams}, used to create a custom api).
 
-*Frontend:
- *Yawp! (To comunicate with yawp at backend);
- *Materialize (To beautify things a little);
- *JQuery (To make requests easier, but it's easy to replace).
+ * Frontend:
+  * Yawp! (To comunicate with yawp at backend);
+  * Materialize (To beautify things a little);
+  * JQuery (To make requests easier, but it's easy to replace).
 
 ## Using
 
