@@ -33,6 +33,10 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
 	color: #0ab0d9;
 }
 
+table.striped>tbody>tr:nth-child(odd) {
+	background-color: rgba(100,100,100,0.1);
+}
+
 
 
 .row .col.s2.floating-button-container {
