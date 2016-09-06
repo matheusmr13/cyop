@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.com.myapi</groupId>
-	<artifactId>saas-api</artifactId>
+	<artifactId>cyop</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -45,6 +45,7 @@
 	</dependencies>
 
 	<build>
+	<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>io.yawp</groupId>
@@ -53,32 +54,32 @@
 			</plugin>
 
 			<plugin>
+				<groupId>pl.allegro</groupId>
+				<artifactId>grunt-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+					<!-- relative to src/main/webapp/, default: static -->
+					<jsSourceDirectory>src/main/webapp/js/</jsSourceDirectory>
+					<gruntExecutable>${basedir}/node_modules/grunt-cli/bin/grunt</gruntExecutable>
+					<runGruntWithNode>true</runGruntWithNode>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>create-resources</goal>
+							<goal>npm</goal>
+							<goal>grunt</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<version>2.5.1</version>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<archiveClasses>true</archiveClasses>
-					<webResources>
-						<!-- in order to interpolate version from pom into appengine-web.xml -->
-						<resource>
-							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
-							<filtering>true</filtering>
-							<targetPath>WEB-INF</targetPath>
-							<includes>
-								<include>**/*.xml</include>
-							</includes>
-						</resource>
-					</webResources>
 				</configuration>
 			</plugin>
 
@@ -96,6 +97,79 @@
 						<!-- change this if you want hdr to simulate eventual consistency -->
 						<jvmFlag>-Ddatastore.default_high_rep_job_policy_unapplied_job_pct=0</jvmFlag>
 					</jvmFlags>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>exec-maven-plugin</artifactId>
+				<groupId>org.codehaus.mojo</groupId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>Hot Deploy Classes Link</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<workingDirectory>${basedir}/src/main/webapp/WEB-INF</workingDirectory>
+							<executable>ln</executable>
+							<commandlineArgs>-sf ../../../../target/cyop-1.0-SNAPSHOT/WEB-INF/classes</commandlineArgs>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Hot Deploy Lib Link</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<workingDirectory>${basedir}/src/main/webapp/WEB-INF</workingDirectory>
+							<executable>ln</executable>
+							<commandlineArgs>-sf ../../../../target/lib</commandlineArgs>
+						</configuration>
+					</execution>
+				</executions>
+				<goals>
+					<goal>package</goal>
+				</goals>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<includeScope>runtime</includeScope>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<archiveClasses>true</archiveClasses>
+					<!-- in order to remove hot deploy classes link -->
+					<warSourceExcludes>WEB-INF/classes/</warSourceExcludes>
+					<webResources>
+						<!-- in order to interpolate version from pom into appengine-web.xml -->
+						<resource>
+							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>WEB-INF</targetPath>
+							<includes>
+								<include>**/*.xml</include>
+							</includes>
+						</resource>
+					</webResources>
 				</configuration>
 			</plugin>
 		</plugins>

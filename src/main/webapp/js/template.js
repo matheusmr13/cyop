@@ -19,7 +19,7 @@ SAASAPI.Template.getHeaderColumn = function(column) {
 						:
 						''
 					) +
-				'</div>'
+				'</div>' +
 			'</th>';
 };
 
