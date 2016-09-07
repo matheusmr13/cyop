@@ -16,7 +16,7 @@ import br.com.saasapi.service.RestFeature;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-@Path("/api")
+@Path("/apie")
 public class InstanceRS extends RestFeature {
 
 	@POST

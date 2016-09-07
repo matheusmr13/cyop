@@ -54,26 +54,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>pl.allegro</groupId>
-				<artifactId>grunt-maven-plugin</artifactId>
-				<version>1.5.0</version>
-				<configuration>
-					<!-- relative to src/main/webapp/, default: static -->
-					<jsSourceDirectory>src/main/webapp/js/</jsSourceDirectory>
-					<gruntExecutable>${basedir}/node_modules/grunt-cli/bin/grunt</gruntExecutable>
-					<runGruntWithNode>true</runGruntWithNode>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>create-resources</goal>
-							<goal>npm</goal>
-							<goal>grunt</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<version>2.5.1</version>
 				<artifactId>maven-compiler-plugin</artifactId>

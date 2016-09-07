@@ -9,11 +9,11 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>EndpointServlet</servlet-name>
-		<url-pattern>/protected/*</url-pattern>
+		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>EndpointServlet</servlet-name>
-		<url-pattern>/protected/_tasks/*</url-pattern>
+		<url-pattern>/api/_tasks/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
