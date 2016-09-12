@@ -1,9 +1,9 @@
-package br.com.saasapi.service;
+package br.com.cyop.service;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import br.com.saasapi.entity.InstanceRS;
+import br.com.cyop.entity.InstanceRS;
 
 public class Application extends javax.ws.rs.core.Application {
 

@@ -1,4 +1,4 @@
-package br.com.saasapi.entity;
+package br.com.cyop.entity;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import br.com.saasapi.service.RestFeature;
+import br.com.cyop.service.RestFeature;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

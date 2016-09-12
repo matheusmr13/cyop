@@ -1,16 +1,16 @@
-package br.com.saasapi.entity;
-
-import org.apache.commons.lang3.StringUtils;
-
-import br.com.saasapi.endpoint.Endpoint;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+package br.com.cyop.entity;
 
 import io.yawp.repository.IdRef;
 import io.yawp.repository.annotations.Id;
 import io.yawp.repository.annotations.Index;
 import io.yawp.repository.annotations.Json;
+
+import org.apache.commons.lang3.StringUtils;
+
+import br.com.cyop.endpoint.Endpoint;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @io.yawp.repository.annotations.Endpoint(path = "/instances")
 public class Instance {

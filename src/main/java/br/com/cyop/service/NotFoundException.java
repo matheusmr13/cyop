@@ -1,4 +1,4 @@
-package br.com.saasapi.service;
+package br.com.cyop.service;
 
 public class NotFoundException extends RuntimeException {
 

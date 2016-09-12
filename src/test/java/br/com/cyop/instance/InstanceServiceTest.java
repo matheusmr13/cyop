@@ -1,4 +1,4 @@
-package br.com.saasapi.instance;
+package br.com.cyop.instance;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -13,12 +13,12 @@ import org.junit.Test;
 
 import com.google.gson.JsonObject;
 
-import br.com.saasapi.endpoint.Endpoint;
-import br.com.saasapi.endpoint.Propertie;
-import br.com.saasapi.endpoint.PropertieType;
-import br.com.saasapi.entity.Instance;
-import br.com.saasapi.entity.InstanceService;
-import br.com.saasapi.service.NotFoundException;
+import br.com.cyop.endpoint.Endpoint;
+import br.com.cyop.endpoint.Propertie;
+import br.com.cyop.endpoint.PropertieType;
+import br.com.cyop.entity.Instance;
+import br.com.cyop.entity.InstanceService;
+import br.com.cyop.service.NotFoundException;
 
 public class InstanceServiceTest extends EndpointTestCaseBase {
 

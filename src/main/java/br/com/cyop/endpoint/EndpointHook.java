@@ -1,8 +1,8 @@
-package br.com.saasapi.endpoint;
-
-import java.util.ArrayList;
+package br.com.cyop.endpoint;
 
 import io.yawp.repository.hooks.Hook;
+
+import java.util.ArrayList;
 
 public class EndpointHook extends Hook<Endpoint> {
 

@@ -1,4 +1,4 @@
-package br.com.saasapi.entity;
+package br.com.cyop.entity;
 
 import io.yawp.repository.Feature;
 
@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import br.com.saasapi.endpoint.Endpoint;
-import br.com.saasapi.endpoint.EndpointService;
-import br.com.saasapi.endpoint.Propertie;
-import br.com.saasapi.service.NotFoundException;
+import br.com.cyop.endpoint.Endpoint;
+import br.com.cyop.endpoint.EndpointService;
+import br.com.cyop.endpoint.Propertie;
+import br.com.cyop.service.NotFoundException;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
