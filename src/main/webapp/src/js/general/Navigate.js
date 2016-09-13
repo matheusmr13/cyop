@@ -144,7 +144,6 @@ var changeLinkEvent = function() {
 		if (!href || externalUrls.test(href) || href.indexOf('mailto:') === 0) {
 			return false;
 		}
-		console.info('hue');
 		if (!e.ctrlKey) {
 			if (Navigate.to(href)) {
 				history.pushState({}, '', href);

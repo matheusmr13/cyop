@@ -1,4 +1,5 @@
 var Entitie = require('./../objs/Entitie.js');
+var Renderer = require('./../general/Renderer.js');
 
 var Entities = {};
 var loadedEntities = {};
@@ -65,7 +66,6 @@ var getTableColumn = function(entity, column) {
 				'</div>' +
 			'</div>' +
 		'</td>';
-	return '<td><input value="' + (entity[column] || '') + '" ' + (column == 'id' ? 'disabled="disabled"' : '') + '"/></td>';
 };
 
 var getTableActions = function() {
@@ -203,35 +203,35 @@ var addNewLine = function() {
 	});
 };
 Entities.init = function(params) {
-	Entitie.list().then(function(entities) {
-		var list = '';
-		loadedEntities = {};
+	var requests = [Renderer.requestPage('/entities/entity-list-item', 'entityListItem'),
+				Renderer.yawpRequest(Entitie.list(), 'entities')];
+	loadedEntities = {};
+	Renderer.openNewPage('/entities/entities-home', requests).then(function(result) {
+		var entities = result.it.entities;
 		for (var i = 0; i < entities.length; i++) {
-			list += getLi(entities[i]);
 			loadedEntities[entities[i].id] = entities[i];
 		}
-		$('#entities').html(list);
-	});
 
-	$('#new-entity').click(function() {
-		newEntityClick();
-	});
-	$('#entities').on('click', '.edit-endpoint', function() {
-		editEndpoint($(this));
-	}).on('click', '.remove-endpoint', function() {
-		removeEndpoint($(this));
-	});
+		$('#new-entity').click(function() {
+			newEntityClick();
+		});
+		$('#entities').on('click', '.edit-endpoint', function() {
+			editEndpoint($(this));
+		}).on('click', '.remove-endpoint', function() {
+			removeEndpoint($(this));
+		});
 
-	$('#entity-table').on('click', '.add-column', function() {
-		addColumn();
-	}).on('click', '.remove-column', function() {
-		removeColumn($(this));
-	}).on('click', '.edit-line', function() {
-		editLine($(this));
-	}).on('click', '.remove-line', function() {
-		removeLine($(this));
-	}).parents('.panel').on('click', '.add-line', function() {
-		addNewLine();
+		$('#entity-table').on('click', '.add-column', function() {
+			addColumn();
+		}).on('click', '.remove-column', function() {
+			removeColumn($(this));
+		}).on('click', '.edit-line', function() {
+			editLine($(this));
+		}).on('click', '.remove-line', function() {
+			removeLine($(this));
+		}).parents('.panel').on('click', '.add-line', function() {
+			addNewLine();
+		});
 	});
 };
 

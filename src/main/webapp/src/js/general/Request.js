@@ -82,7 +82,7 @@ var _http = function (type, url, data) {
 		settings.data = data;
 	}
 
-	return $.ajax(settings);
+	return Promise.resolve($.ajax(settings));
 };
 
 var http = function (type, url, data, settings) {

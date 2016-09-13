@@ -95,6 +95,20 @@ var putValueOnJson = function (jsonObject, path, val) {
 		jsonObject[key] = putValueOnJson(jsonParent, pathSplit.toString().replace(/\,/g, '.'), val);
 	}
 	return jsonObject;
+};
+
+JsonUtils.getValueOnJson = function (jsonObject, path) {
+	var pathSplit = path.split('.');
+	if (typeof jsonObject === 'undefined') {
+		jsonObject = {};
+	}
+	if (pathSplit.length == 1) {
+		return jsonObject[path];
+	} else if (pathSplit.length > 1) {
+		var jsonParent = jsonObject[pathSplit[0]];
+		var key = pathSplit.shift();
+		return JsonUtils.getValueOnJson(jsonParent, pathSplit.toString().replace(/\,/g, '.'));
+	}
 }
 
 module.exports = JsonUtils;
