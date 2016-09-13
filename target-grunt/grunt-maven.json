@@ -1,0 +1,10 @@
+{
+    "filesToWatch": "/home/matheusmr/projetos/cyop/src/main/webapp/src/main/webapp/js//**",
+    "directoryToWatch": "/home/matheusmr/projetos/cyop/src/main/webapp/src/main/webapp/js/",
+    "projectRootPath": "/home/matheusmr/projetos/cyop",
+    "targetPath": "/home/matheusmr/projetos/cyop/target",
+    "sourceDirectory": "src/main/webapp",
+    "jsSourceDirectory": "src/main/webapp/js/",
+    "warTargetDirectory": "src/main/webapp/js/",
+    "filteredFiles": ["**/node_modules.tar"]
+}

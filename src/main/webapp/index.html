@@ -1,21 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 
 <head>
-	<link rel="stylesheet" href="css/external/materialize.css">
-	<link rel="stylesheet" href="css/main.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="icon" type="image/png" href="favicon.png">
+	<base href="/">
+	<meta charset="UTF-8">
+	<meta content="ie=edge" http-equiv="x-ua-compatible">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+	<link rel="icon" href="images/favicon.png">
+
+	<link rel="stylesheet" href="static/styles.css" />
+
+	<title>CYOP</title>
 </head>
 
 <body>
-	<div class="navbar-fixed">
+	<header class="navbar-fixed">
 		<nav>
 			<div class="nav-wrapper">
 				<a href="#" class="brand-logo"><i class="material-icons">cloud</i>SaaS API - Create and distribute your endpoints</a>
 				<span href="#" class=" brand-logo right">Editing: <span id="selected-table">-</span></span>
 			</div>
 		</nav>
-	</div>
+	</header>
+	<!--<main id="content">
+	</main>-->
 	<div class="row" id="content">
 		<form class="col s4 panel left-panel">
 			<div class="row">
@@ -48,11 +56,11 @@
 				</div>
 			</div>
 		</form>
-		<script src="js/external/jquery-3.0.0.min.js"></script>
-		<script src="js/external/yawp.js"></script>
-		<script src="js/external/materialize.min.js"></script>
-		<script src="js/template.js"></script>
-		<script src="js/main.js"></script>
+	</div>
+	<div class="header-placeholder" style="display:none;"></div>
+	<footer>
+	</footer>
+	<script src="static/compiled.js"></script>
 </body>
 
 </html>

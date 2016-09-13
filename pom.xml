@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.com.myapi</groupId>
-	<artifactId>saas-api</artifactId>
+	<artifactId>cyop</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -45,6 +45,7 @@
 	</dependencies>
 
 	<build>
+	<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>io.yawp</groupId>
@@ -63,37 +64,15 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<archiveClasses>true</archiveClasses>
-					<webResources>
-						<!-- in order to interpolate version from pom into appengine-web.xml -->
-						<resource>
-							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
-							<filtering>true</filtering>
-							<targetPath>WEB-INF</targetPath>
-							<includes>
-								<include>**/*.xml</include>
-							</includes>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<groupId>com.google.appengine</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>${appengine.target.version}</version>
 				<configuration>
-					<!-- <address>0.0.0.0</address> -->
 					<jvmFlags>
 						<jvmFlag>-Xdebug</jvmFlag>
 						<jvmFlag>-Xnoagent</jvmFlag>
 						<jvmFlag>-Xrunjdwp:transport=dt_socket,address=4001,suspend=n,server=y
 						</jvmFlag>
-						<!-- change this if you want hdr to simulate eventual consistency -->
 						<jvmFlag>-Ddatastore.default_high_rep_job_policy_unapplied_job_pct=0</jvmFlag>
 					</jvmFlags>
 				</configuration>
