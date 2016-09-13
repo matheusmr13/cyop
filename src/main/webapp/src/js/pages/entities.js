@@ -8,7 +8,7 @@ var getLi = function(entity) {
 		'<div><span class="entity-name">' + entity.name + '</span>' +
 		'<a href="#!" class="secondary-content remove-endpoint"><i class="material-icons">delete_forever</i></a>' +
 		'<a href="#!" class="secondary-content edit-endpoint"><i class="material-icons">edit</i></a>' +
-		'</div>';
+		'</div></li>';
 };
 
 var getHeaderColumn = function(column) {
