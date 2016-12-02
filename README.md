@@ -6,9 +6,9 @@
 
 ## Running local
 
-> git clone git@github.com:matheusmr13/xy-inc.git
+> git clone git@github.com:matheusmr13/cyop.git
 
-> cd xy-inc
+> cd cyop
 
 > mvn clean install && mvn appengine:devserver
 
