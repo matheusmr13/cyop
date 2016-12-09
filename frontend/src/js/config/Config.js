@@ -1,8 +1,7 @@
 var Config = {};
 Config.basePageUrl = '/pages';
-Config.baseBundleUrl = '/bundle';
 Config.apiUrl = '/api';
+Config.metaapiUrl = '/_admin';
 Config.noauthUrl = '/noauth';
-Config.expirationDelta = 1000 * 60 * 60 * 24;
-Config.timeToHideMessage = 8000;
+Config.defaultPage = '/entities';
 module.exports = Config;

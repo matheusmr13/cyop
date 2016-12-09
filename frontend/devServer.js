@@ -15,7 +15,7 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.use('/admin', proxy(url.parse('http://localhost:8080/admin')));
+app.use('/_admin', proxy(url.parse('http://localhost:8080/_admin')));
 app.use('/api', proxy(url.parse('http://localhost:8080/api')));
 app.use('/noauth', proxy(url.parse('http://localhost:8080/noauth')));
 

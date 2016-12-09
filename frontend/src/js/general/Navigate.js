@@ -1,4 +1,5 @@
 var History = require('./../libs/History.js');
+var Config = require('./../config/Config');
 var Navigate = {};
 
 Navigate.to = function(path, internalCall) {
@@ -7,7 +8,14 @@ Navigate.to = function(path, internalCall) {
 		params = extractParameters(pathSplit[1]),
 		hashParts = filePath.split('/'),
 		requirePath = filePath.substring(1, filePath.lastIndexOf('/') || filePath.length),
+		object;
+
+	try {
 		object = require('./../pages/' + requirePath + '.js');
+	} catch(e) {
+		Navigate.to(Config.defaultPage);
+		return;
+	}
 
 	if (!windowTarget(filePath, params)) {
 		return false;

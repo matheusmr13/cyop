@@ -1,6 +1,7 @@
+var Config = require('./config/Config')
 var yawp = require('yawp');
 yawp.config(function (c) {
-	c.baseUrl('/admin');
+	c.baseUrl(Config.metaapiUrl);
 });
 window.yawp = yawp;
 
