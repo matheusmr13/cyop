@@ -1,5 +1,7 @@
 package br.com.cyop.entity;
 
+import br.com.cyop.version.Version;
+import br.com.cyop.version.VersionService;
 import io.yawp.repository.Feature;
 
 import java.util.ArrayList;
@@ -17,9 +19,9 @@ import com.google.gson.JsonObject;
 
 public class InstanceService extends Feature {
 
-	public JsonObject createInstance(String entityName, String instanceJson) {
+	public JsonObject createInstance(String version, String entityName, String instanceJson) {
 		validateField(entityName);
-		Endpoint endpoint = getEndpoint(entityName);
+		Endpoint endpoint = getEndpoint(version, entityName);
 		feature(EndpointService.class).updateId(endpoint);
 
 		Instance instance = Instance.create(endpoint, instanceJson);
@@ -36,9 +38,9 @@ public class InstanceService extends Feature {
 		}
 	}
 
-	public List<JsonObject> getListOfInstance(String entityName) {
+	public List<JsonObject> getListOfInstance(String version, String entityName) {
 		validateField(entityName);
-		Endpoint entity = getEndpoint(entityName);
+		Endpoint entity = getEndpoint(version, entityName);
 
 		List<Instance> instancies = listByEndpoint(entity);
 		List<JsonObject> instanciesObjects = new ArrayList<JsonObject>(instancies.size());
@@ -52,26 +54,26 @@ public class InstanceService extends Feature {
 		return yawp(Instance.class).where("entityId", "=", entity.getId()).list();
 	}
 
-	public Instance getInstanceById(String entityName, Long id) {
+	public Instance getInstanceById(String version, String entityName, Long id) {
 		validateField(entityName);
-		Instance instance = findInstanceById(getEndpoint(entityName), id);
+		Instance instance = findInstanceById(getEndpoint(version, entityName), id);
 		return instance;
 	}
 
-	public JsonObject updateInstance(String entityName, Long id, String instanceJson) {
+	public JsonObject updateInstance(String version, String entityName, Long id, String instanceJson) {
 		validateField(entityName);
 		validateField(id);
-		Endpoint entity = getEndpoint(entityName);
+		Endpoint entity = getEndpoint(version, entityName);
 
 		Instance instance = findInstanceById(entity, id);
 		instance.updateJson(instanceJson);
 		return yawp.save(instance).object;
 	}
 
-	public JsonObject deleteEntity(String entityName, Long id) {
+	public JsonObject deleteEntity(String version, String entityName, Long id) {
 		validateField(entityName);
 		validateField(id);
-		Endpoint entity = getEndpoint(entityName);
+		Endpoint entity = getEndpoint(version, entityName);
 
 		Instance instance = findInstanceById(entity, id);
 		yawp.destroy(instance.yawpId);
@@ -86,8 +88,9 @@ public class InstanceService extends Feature {
 		return first;
 	}
 
-	private Endpoint getEndpoint(String entityName) {
-		Endpoint entity = yawp(Endpoint.class).where("name", "=", entityName).first();
+	private Endpoint getEndpoint(String versionUrl, String entityName) {
+		Version version = new VersionService().gerVersionByUrl(versionUrl);
+		Endpoint entity = new EndpointService().getEndpointByName(entityName);
 		if (entity == null) {
 			throw new NotFoundException();
 		}
@@ -106,4 +109,19 @@ public class InstanceService extends Feature {
 		}
 	}
 
+	public List<JsonObject> getActionOverList(String version, String entityName, String action) {
+		return null;
+	}
+
+	public List<JsonObject> getActionOverElement(String version, String entityName, Long id, String action) {
+		return null;
+	}
+
+	public List<JsonObject> putActionOverList(String version, String entityName, String action) {
+		return null;
+	}
+
+	public List<JsonObject> putActionOverElement(String version, String entityName, Long id, String action) {
+		return null;
+	}
 }

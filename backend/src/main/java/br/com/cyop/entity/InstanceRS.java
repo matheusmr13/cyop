@@ -22,63 +22,63 @@ public class InstanceRS extends RestFeature {
 	@POST
 	@Path("/{version}/{entity}")
 	public Response create(@PathParam("version") String version, @PathParam("entity") String entityName, @FormParam("instanceJson") String instanceJson) {
-		JsonObject instance = feature(InstanceService.class).createInstance(entityName, instanceJson);
+		JsonObject instance = feature(InstanceService.class).createInstance(version, entityName, instanceJson);
 		return Response.ok().entity(new Gson().toJson(instance)).build();
 	}
 
 	@GET
 	@Path("/{version}/{entity}")
 	public Response list(@PathParam("version") String version, @PathParam("entity") String entityName) {
-		List<JsonObject> instanciesObjects = feature(InstanceService.class).getListOfInstance(entityName);
+		List<JsonObject> instanciesObjects = feature(InstanceService.class).getListOfInstance(version, entityName);
 		return Response.ok().entity(new Gson().toJson(instanciesObjects)).build();
 	}
 
 	@GET
 	@Path("/{version}/{entity}/{id}")
 	public Response fetch(@PathParam("version") String version, @PathParam("entity") String entity, @PathParam("id") Long id) {
-		Instance instance = feature(InstanceService.class).getInstanceById(entity, id);
+		Instance instance = feature(InstanceService.class).getInstanceById(version, entity, id);
 		return Response.ok().entity(new Gson().toJson(instance.object)).build();
 	}
 
 	@PUT
 	@Path("/{version}/{entity}/{id}")
 	public Response update(@PathParam("version") String version, @PathParam("entity") String entity, @PathParam("id") Long id, @FormParam("instance") String instanceJson) {
-		JsonObject object = feature(InstanceService.class).updateInstance(entity, id, instanceJson);
+		JsonObject object = feature(InstanceService.class).updateInstance(version, entity, id, instanceJson);
 		return Response.ok().entity(new Gson().toJson(object)).build();
 	}
 
 	@DELETE
 	@Path("/{version}/{entity}/{id}")
 	public Response delete(@PathParam("version") String version, @PathParam("entity") String entityName, @PathParam("id") Long id) {
-		JsonObject instance = feature(InstanceService.class).deleteEntity(entityName, id);
+		JsonObject instance = feature(InstanceService.class).deleteEntity(version, entityName, id);
 		return Response.ok().entity(new Gson().toJson(instance)).build();
 	}
 
 	@GET
 	@Path("/{version}/{entity}/{action}")
-	public Response getActionOverList(@PathParam("version") String version, @PathParam("entity") String entityName) {
-		List<JsonObject> instanciesObjects = feature(InstanceService.class).getListOfInstance(entityName);
+	public Response getActionOverList(@PathParam("version") String version, @PathParam("entity") String entityName, @PathParam("action") String action) {
+		List<JsonObject> instanciesObjects = feature(InstanceService.class).getActionOverList(version, entityName, action);
 		return Response.ok().entity(new Gson().toJson(instanciesObjects)).build();
 	}
 
 	@GET
 	@Path("/{version}/{entity}/{id}/{action}")
 	public Response getActionOverElement(@PathParam("version") String version, @PathParam("entity") String entityName, @PathParam("id") Long id, @PathParam("action") String action) {
-		List<JsonObject> instanciesObjects = feature(InstanceService.class).getListOfInstance(entityName);
+		List<JsonObject> instanciesObjects = feature(InstanceService.class).getActionOverElement(version, entityName, id, action);
 		return Response.ok().entity(new Gson().toJson(instanciesObjects)).build();
 	}
 
 	@PUT
 	@Path("/{version}/{entity}/{action}")
-	public Response putActionOverList(@PathParam("version") String version, @PathParam("entity") String entityName) {
-		List<JsonObject> instanciesObjects = feature(InstanceService.class).getListOfInstance(entityName);
+	public Response putActionOverList(@PathParam("version") String version, @PathParam("entity") String entityName, @PathParam("action") String action) {
+		List<JsonObject> instanciesObjects = feature(InstanceService.class).putActionOverList(version, entityName, action);
 		return Response.ok().entity(new Gson().toJson(instanciesObjects)).build();
 	}
 
 	@PUT
 	@Path("/{version}/{entity}/{id}/{action}")
 	public Response putActionOverElement(@PathParam("version") String version, @PathParam("entity") String entityName, @PathParam("id") Long id, @PathParam("action") String action) {
-		List<JsonObject> instanciesObjects = feature(InstanceService.class).getListOfInstance(entityName);
+		List<JsonObject> instanciesObjects = feature(InstanceService.class).putActionOverElement(version, entityName, id, action);
 		return Response.ok().entity(new Gson().toJson(instanciesObjects)).build();
 	}
 }

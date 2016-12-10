@@ -8,4 +8,8 @@ public class EndpointService extends Feature {
 		endpoint.maxId++;
 		return yawp.save(endpoint);
 	}
+
+	public Endpoint getEndpointByName(String entityName) {
+		return yawp(Endpoint.class).where("name", "=", entityName).first();
+	}
 }
