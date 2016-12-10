@@ -1,5 +1,6 @@
 package br.com.cyop.endpoint;
 
+import br.com.cyop.version.Version;
 import io.yawp.repository.IdRef;
 import io.yawp.repository.annotations.Id;
 import io.yawp.repository.annotations.Index;
@@ -19,7 +20,10 @@ public class Endpoint {
 	@Json
 	List<Propertie> properties;
 
-	Integer maxId = 0;
+	@Index
+	IdRef<Version> version;
+
+	Long maxId;
 
 	public IdRef<Endpoint> getId() {
 		return id;
@@ -29,7 +33,7 @@ public class Endpoint {
 		return properties;
 	}
 
-	public Integer getMaxId() {
+	public Long getMaxId() {
 		return maxId;
 	}
 
@@ -37,7 +41,7 @@ public class Endpoint {
 		Endpoint endpoint = new Endpoint();
 		endpoint.name = name;
 		endpoint.properties = properties;
-		endpoint.maxId = 0;
+		endpoint.maxId = 0l;
 		return endpoint;
 	}
 }

@@ -52,13 +52,13 @@ public class InstanceService extends Feature {
 		return yawp(Instance.class).where("entityId", "=", entity.getId()).list();
 	}
 
-	public Instance getInstanceById(String entityName, String id) {
+	public Instance getInstanceById(String entityName, Long id) {
 		validateField(entityName);
 		Instance instance = findInstanceById(getEndpoint(entityName), id);
 		return instance;
 	}
 
-	public JsonObject updateInstance(String entityName, String id, String instanceJson) {
+	public JsonObject updateInstance(String entityName, Long id, String instanceJson) {
 		validateField(entityName);
 		validateField(id);
 		Endpoint entity = getEndpoint(entityName);
@@ -68,7 +68,7 @@ public class InstanceService extends Feature {
 		return yawp.save(instance).object;
 	}
 
-	public JsonObject deleteEntity(String entityName, String id) {
+	public JsonObject deleteEntity(String entityName, Long id) {
 		validateField(entityName);
 		validateField(id);
 		Endpoint entity = getEndpoint(entityName);
@@ -78,7 +78,7 @@ public class InstanceService extends Feature {
 		return instance.object;
 	}
 
-	private Instance findInstanceById(Endpoint entity, String id) {
+	private Instance findInstanceById(Endpoint entity, Long id) {
 		Instance first = yawp(Instance.class).where("entityId", "=", entity.getId()).and("id", "=", id).first();
 		if (first == null) {
 			throw new NotFoundException();
@@ -96,6 +96,12 @@ public class InstanceService extends Feature {
 
 	private void validateField(String field) {
 		if (StringUtils.isEmpty(field)) {
+			throw new NotFoundException();
+		}
+	}
+
+	private void validateField(Object field) {
+		if (field == null) {
 			throw new NotFoundException();
 		}
 	}
