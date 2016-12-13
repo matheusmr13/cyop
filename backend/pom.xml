@@ -60,6 +60,7 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+					<webXml>src\main\webapp\WEB-INF\web.xml</webXml>
 				</configuration>
 			</plugin>
 
