@@ -1,0 +1,65 @@
+{
+  "endpoints": [{
+    "url": "person",
+    "columns": [{
+        "name": "name",
+        "type": "string"
+      }, {
+        "name": "age",
+        "type": "integer"
+      }, {
+        "name": "mother",
+        "type": "endpoint",
+        "referer": "person"
+      }, {
+        "name": "father",
+        "type": "endpoint",
+        "referer": "person"
+      }, {
+        "name": "auth_entity",
+        "type": "endpoint",
+        "referer": "auth_entity"
+      }, {
+        "name": "children",
+        "type": "list",
+        "listtype": "endpoint",
+        "referer": "person"
+      }, {
+        "name": "dream_jobs",
+        "type": "list",
+        "listtype": "enumerator",
+        "referer": "job"
+      }, {
+        "name": "actual_job",
+        "type": "enumerator",
+        "referer": "job"
+      }],
+    "action": {
+      "dismiss": {
+        "actual_job": null
+      }
+    },
+    "shield": {
+      "list": ["admin", "manager"],
+      "get": ["manager"],
+      "put": ["manager"],
+      "post": ["admin"],
+      "delete": [],
+      "dismiss": ["admin", "manager"]
+    }
+  }],
+  "enumerators": [{
+    "name": "job",
+    "values": ["teacher", "cientist", "officer", "developer"]
+  }, {
+    "name": "profile",
+    "values": ["admin", "manager", "worker"]
+  }],
+  "api_config": {
+    "version_name": "v1",
+    "login_api": {
+      "enabled": true,
+      "profile_enumerator": "profile"
+    }
+  }
+}

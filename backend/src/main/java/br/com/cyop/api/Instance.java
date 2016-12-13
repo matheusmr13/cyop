@@ -1,4 +1,4 @@
-package br.com.cyop.entity;
+package br.com.cyop.api;
 
 import io.yawp.repository.IdRef;
 import io.yawp.repository.annotations.Id;

@@ -1,4 +1,4 @@
-package br.com.cyop.entity;
+package br.com.cyop.api;
 
 import br.com.cyop.version.Version;
 import br.com.cyop.version.VersionService;
@@ -17,7 +17,7 @@ import br.com.cyop.service.NotFoundException;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class InstanceService extends Feature {
+public class RestMethodsService extends Feature {
 
 	public JsonObject createInstance(String version, String entityName, String instanceJson) {
 		validateField(entityName);
@@ -89,8 +89,8 @@ public class InstanceService extends Feature {
 	}
 
 	private Endpoint getEndpoint(String versionUrl, String entityName) {
-		Version version = new VersionService().gerVersionByUrl(versionUrl);
-		Endpoint entity = new EndpointService().getEndpointByName(entityName);
+		Version version = feature(VersionService.class).gerVersionByUrl(versionUrl);
+		Endpoint entity = feature(EndpointService.class).getEndpointByNameAndVersion(version, entityName);
 		if (entity == null) {
 			throw new NotFoundException();
 		}
@@ -107,21 +107,5 @@ public class InstanceService extends Feature {
 		if (field == null) {
 			throw new NotFoundException();
 		}
-	}
-
-	public List<JsonObject> getActionOverList(String version, String entityName, String action) {
-		return null;
-	}
-
-	public List<JsonObject> getActionOverElement(String version, String entityName, Long id, String action) {
-		return null;
-	}
-
-	public List<JsonObject> putActionOverList(String version, String entityName, String action) {
-		return null;
-	}
-
-	public List<JsonObject> putActionOverElement(String version, String entityName, Long id, String action) {
-		return null;
 	}
 }

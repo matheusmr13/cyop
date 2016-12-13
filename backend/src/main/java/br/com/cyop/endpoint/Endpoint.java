@@ -8,14 +8,14 @@ import io.yawp.repository.annotations.Json;
 
 import java.util.List;
 
-@io.yawp.repository.annotations.Endpoint(path = "/entities")
+@io.yawp.repository.annotations.Endpoint(path = "/endpoints")
 public class Endpoint {
 
 	@Id
 	IdRef<Endpoint> id;
 
 	@Index
-	String name;
+	String url;
 
 	@Json
 	List<Propertie> properties;
@@ -37,11 +37,12 @@ public class Endpoint {
 		return maxId;
 	}
 
-	public static Endpoint create(String name, List<Propertie> properties) {
+	public static Endpoint create(String name, Version version, List<Propertie> properties) {
 		Endpoint endpoint = new Endpoint();
-		endpoint.name = name;
+		endpoint.url = name;
 		endpoint.properties = properties;
 		endpoint.maxId = 0l;
+		endpoint.version = version.getId();
 		return endpoint;
 	}
 }
