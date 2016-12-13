@@ -1,4 +1,4 @@
-package br.com.cyop.entity;
+package br.com.cyop.api;
 
 import io.yawp.repository.IdRef;
 import io.yawp.repository.annotations.Id;
@@ -25,11 +25,11 @@ public class Instance {
 	JsonObject object;
 
 	@Index
-	String id;
+	Long id;
 
 	public static Instance create(Endpoint endpoint, String instanceJson) {
 		Instance instance = new Instance();
-		instance.id = endpoint.getMaxId().toString();
+		instance.id = endpoint.getMaxId();
 		instance.entityId = endpoint.getId();
 		instance.updateJson(instanceJson);
 		return instance;
@@ -56,7 +56,7 @@ public class Instance {
 		return object;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 }
