@@ -22,12 +22,12 @@ import br.com.cyop.api.Instance;
 import br.com.cyop.api.RestMethodsService;
 import br.com.cyop.service.NotFoundException;
 
-public class InstanceServiceTest extends EndpointTestCaseBase {
+public class SimpleApiTest extends EndpointTestCaseBase {
 
 	@Before
 	public void before() {
 		List<Propertie> properties = new ArrayList<>();
-		properties.add(Propertie.create("bar", PropertieType.STRING));
+		properties.add(Propertie.create("bar", PropertieType.TEXT));
 
 		Version v1 = Version.create("v1");
 		yawp.save(v1);

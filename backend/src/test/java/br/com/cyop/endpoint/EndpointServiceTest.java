@@ -16,11 +16,11 @@ public class EndpointServiceTest extends EndpointTestCaseBase {
 		yawp.saveWithHooks(endpoint);
 
 		endpoint = yawp(Endpoint.class).first();
-		assertEquals(new Integer(0), endpoint.maxId);
+		assertEquals(new Long(0), endpoint.maxId);
 		feature(EndpointService.class).updateId(endpoint);
 
 		endpoint = yawp(Endpoint.class).first();
-		assertEquals(new Integer(1), endpoint.maxId);
+		assertEquals(new Long(1), endpoint.maxId);
 	}
 
 }

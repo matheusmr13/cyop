@@ -23,7 +23,7 @@ public class Endpoint {
 	@Index
 	IdRef<Version> version;
 
-	Long maxId;
+	Long maxId = 0l;
 
 	public IdRef<Endpoint> getId() {
 		return id;
