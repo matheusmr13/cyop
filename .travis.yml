@@ -1,2 +1,2 @@
-script: build.sh
+before_install: cd project
 language: java
