@@ -1,4 +1,7 @@
 # CYOP - Create Your Own API
+[![Build Status](https://travis-ci.org/matheusmr13/cyop.svg?branch=master)](https://travis-ci.org/matheusmr13/cyop)
+[![Coverage Status](https://coveralls.io/repos/github/matheusmr13/cyop/badge.svg?branch=master)](https://coveralls.io/github/matheusmr13/cyop?branch=master)
+
 ## Requirements
 
 - Maven ^3.1.1
