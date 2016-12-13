@@ -1,2 +1,2 @@
-before_install: cd project
+before_install: cd backend
 language: java
