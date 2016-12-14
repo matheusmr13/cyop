@@ -17,6 +17,8 @@ public class Version {
 	Date creationDate;
 	@Index
 	Integer number;
+	@Index
+	boolean active = true;
 
 	public static Version create(String url) {
 		Version version = new Version();

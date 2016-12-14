@@ -113,7 +113,7 @@ public class RestMethodsService extends Feature {
 	}
 
 	private Endpoint getEndpoint(String versionUrl, String entityName) {
-		Version version = feature(VersionService.class).gerVersionByUrl(versionUrl);
+		Version version = feature(VersionService.class).getVersionByUrl(versionUrl);
 		Endpoint entity = feature(EndpointService.class).getEndpointByNameAndVersion(version, entityName);
 		if (entity == null) {
 			throw new NotFoundException();

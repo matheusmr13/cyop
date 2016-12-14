@@ -37,7 +37,7 @@ public class DataValidationTest extends EndpointTestCaseBase {
 	}
 
 	@Test
-	public void testTextProperty() {
+	public void textPropertyTest() {
 		RestMethodsService feature = feature(RestMethodsService.class);
 		String testingProperty = "name";
 		assertEquals("Matheus", createInstance(feature, newJsonObjectString(testingProperty, "Matheus")).get(testingProperty).getAsString());
@@ -48,7 +48,7 @@ public class DataValidationTest extends EndpointTestCaseBase {
 	}
 
 	@Test
-	public void testIntegerProperty() {
+	public void integerPropertyTest() {
 		RestMethodsService feature = feature(RestMethodsService.class);
 		String testingProperty = "age";
 		assertEquals(1000, createInstance(feature, newJsonObjectNumber(testingProperty, 1000)).get(testingProperty).getAsInt());
