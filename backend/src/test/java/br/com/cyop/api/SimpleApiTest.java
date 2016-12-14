@@ -40,8 +40,21 @@ public class SimpleApiTest extends EndpointTestCaseBase {
 		Instance instance = yawp(Instance.class).first();
 		assertEquals(new Long(1), instance.getId());
 		assertNotNull(instance.getObject());
+		assertNotNull(instance.getYawpId());
+		assertNotNull(instance.getEndpointId());
 		assertFalse(instance.getObject().get("bar").isJsonNull());
 		assertEquals("Matheus", instance.getObject().get("bar").getAsString());
+	}
+
+	@Test
+	public void createInstanceWithoutObjectTest() {
+		feature(RestMethodsService.class).createInstance("v1", "foo", "");
+
+		Instance instance = yawp(Instance.class).first();
+		assertEquals(new Long(1), instance.getId());
+		assertNotNull(instance.getObject());
+		assertNotNull(instance.getYawpId());
+		assertNotNull(instance.getEndpointId());
 	}
 
 	@Test(expected = NotFoundException.class)

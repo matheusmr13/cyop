@@ -41,6 +41,9 @@ public class RestMethodsService extends Feature {
 	}
 
 	private Instance setAndValidateProperties(Instance instance, String toMergeInstanceStringJson, Endpoint endpoint) {
+		if (StringUtils.isEmpty(toMergeInstanceStringJson)) {
+			return instance;
+		}
 		JsonObject instanceJson = instance.getObject();
 		JsonObject toMergeInstanceJson = new JsonParser().parse(toMergeInstanceStringJson).getAsJsonObject();
 		toMergeInstanceJson.remove("id");

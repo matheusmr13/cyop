@@ -40,7 +40,7 @@ public class Instance {
 		return yawpId;
 	}
 
-	public IdRef<Endpoint> getEntityId() {
+	public IdRef<Endpoint> getEndpointId() {
 		return entityId;
 	}
 
