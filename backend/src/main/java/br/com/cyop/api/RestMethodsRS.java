@@ -44,7 +44,7 @@ public class RestMethodsRS extends RestFeature {
 	@PUT
 	@Path("/{version}/{api}/{id}")
 	public Response update(	@PathParam("version") String version, @PathParam("api") String entity, @PathParam("id") Long id,
-							@FormParam("instance") String instanceJson) {
+							@FormParam("api") String instanceJson) {
 		JsonObject object = feature(RestMethodsService.class).updateInstance(version, entity, id, instanceJson);
 		return Response.ok().entity(new Gson().toJson(object)).build();
 	}

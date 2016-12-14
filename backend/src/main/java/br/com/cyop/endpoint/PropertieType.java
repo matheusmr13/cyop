@@ -53,4 +53,8 @@ public enum PropertieType {
 	public Object getPropertie(JsonElement json) {
 		return json;
 	}
+
+	public void addProperty(JsonObject instanceJson, JsonElement jsonElement, String propertieName) {
+
+	}
 }

@@ -1,4 +1,4 @@
-package br.com.cyop.instance;
+package br.com.cyop.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -18,9 +18,7 @@ import com.google.gson.JsonObject;
 import br.com.cyop.endpoint.Endpoint;
 import br.com.cyop.endpoint.Propertie;
 import br.com.cyop.endpoint.PropertieType;
-import br.com.cyop.api.Instance;
-import br.com.cyop.api.RestMethodsService;
-import br.com.cyop.service.NotFoundException;
+import br.com.cyop.exception.NotFoundException;
 
 public class SimpleApiTest extends EndpointTestCaseBase {
 

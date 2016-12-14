@@ -2,6 +2,7 @@ package br.com.cyop.api;
 
 import br.com.cyop.version.Version;
 import br.com.cyop.version.VersionService;
+import com.google.gson.JsonParser;
 import io.yawp.repository.Feature;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import br.com.cyop.endpoint.Endpoint;
 import br.com.cyop.endpoint.EndpointService;
 import br.com.cyop.endpoint.Propertie;
-import br.com.cyop.service.NotFoundException;
+import br.com.cyop.exception.NotFoundException;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,7 +25,8 @@ public class RestMethodsService extends Feature {
 		Endpoint endpoint = getEndpoint(version, entityName);
 		feature(EndpointService.class).updateId(endpoint);
 
-		Instance instance = Instance.create(endpoint, instanceJson);
+		Instance instance = Instance.create(endpoint);
+		setAndValidateProperties(instance, instanceJson, endpoint);
 		setInstanceDefaults(endpoint, instance);
 		return yawp.save(instance).object;
 	}
@@ -38,11 +40,30 @@ public class RestMethodsService extends Feature {
 		}
 	}
 
-	public List<JsonObject> getListOfInstance(String version, String entityName) {
-		validateField(entityName);
-		Endpoint entity = getEndpoint(version, entityName);
+	private Instance setAndValidateProperties(Instance instance, String toMergeInstanceStringJson, Endpoint endpoint) {
+		JsonObject instanceJson = instance.getObject();
+		JsonObject toMergeInstanceJson = new JsonParser().parse(toMergeInstanceStringJson).getAsJsonObject();
+		toMergeInstanceJson.remove("id");
+		for (Propertie propertie : endpoint.getProperties()) {
+			String propertieName = propertie.getName();
+			if (toMergeInstanceJson.has(propertieName)) {
+				JsonElement jsonElement = toMergeInstanceJson.get(propertieName);
+				if (jsonElement.isJsonNull()) {
+					instanceJson.remove(propertieName);
+				} else {
+					instanceJson.addProperty(propertieName, jsonElement.getAsString());
+//					propertie.getType().addProperty(instanceJson, jsonElement, propertieName);
+				}
+			}
+		}
+		return instance;
+	}
 
-		List<Instance> instancies = listByEndpoint(entity);
+	public List<JsonObject> getListOfInstance(String version, String entityName) {
+		this.validateField(entityName);
+		Endpoint entity = this.getEndpoint(version, entityName);
+
+		List<Instance> instancies = this.listByEndpoint(entity);
 		List<JsonObject> instanciesObjects = new ArrayList<JsonObject>(instancies.size());
 		for (Instance instance : instancies) {
 			instanciesObjects.add(instance.object);
@@ -55,18 +76,18 @@ public class RestMethodsService extends Feature {
 	}
 
 	public Instance getInstanceById(String version, String entityName, Long id) {
-		validateField(entityName);
-		Instance instance = findInstanceById(getEndpoint(version, entityName), id);
+		this.validateField(entityName);
+		Instance instance = this.findInstanceById(this.getEndpoint(version, entityName), id);
 		return instance;
 	}
 
 	public JsonObject updateInstance(String version, String entityName, Long id, String instanceJson) {
-		validateField(entityName);
-		validateField(id);
-		Endpoint entity = getEndpoint(version, entityName);
+		this.validateField(entityName);
+		this.validateField(id);
+		Endpoint entity = this.getEndpoint(version, entityName);
 
-		Instance instance = findInstanceById(entity, id);
-		instance.updateJson(instanceJson);
+		Instance instance = this.findInstanceById(entity, id);
+		this.setAndValidateProperties(instance, instanceJson, entity);
 		return yawp.save(instance).object;
 	}
 

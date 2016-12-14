@@ -27,21 +27,13 @@ public class Instance {
 	@Index
 	Long id;
 
-	public static Instance create(Endpoint endpoint, String instanceJson) {
+	public static Instance create(Endpoint endpoint) {
 		Instance instance = new Instance();
 		instance.id = endpoint.getMaxId();
 		instance.entityId = endpoint.getId();
-		instance.updateJson(instanceJson);
+		instance.object = new JsonObject();
+		instance.object.addProperty("id", instance.id);
 		return instance;
-	}
-
-	public void updateJson(String instanceJson) {
-		if (StringUtils.isEmpty(instanceJson)) {
-			this.object = new JsonObject();
-		} else {
-			this.object = new JsonParser().parse(instanceJson).getAsJsonObject();
-		}
-		this.object.addProperty("id", this.id);
 	}
 
 	public IdRef<Instance> getYawpId() {
