@@ -2,4 +2,4 @@ before_install: cd backend
 language: java
 
 after_success:
-  - mvn clean test jacoco:report coveralls:report
+  - mvn cobertura:cobertura coveralls:report
