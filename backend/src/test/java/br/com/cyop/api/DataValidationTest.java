@@ -3,6 +3,8 @@ package br.com.cyop.api;
 import br.com.cyop.endpoint.Endpoint;
 import br.com.cyop.endpoint.Propertie;
 import br.com.cyop.endpoint.PropertieType;
+import br.com.cyop.enumerator.Enumerator;
+import br.com.cyop.enumerator.EnumeratorService;
 import br.com.cyop.exception.InvalidFieldTypeException;
 import br.com.cyop.version.Version;
 import com.google.gson.JsonObject;
@@ -11,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -21,17 +24,19 @@ public class DataValidationTest extends EndpointTestCaseBase {
 
 	@Before
 	public void before() {
+		Version v1 = Version.create("v1");
+		yawp.save(v1);
+
+		Enumerator enumeratorTest = feature(EnumeratorService.class).createInstance("v1", "enumeratorTest", Arrays.asList("ADMIN", "0", "true"));
+
 		List<Propertie> properties = new ArrayList<>();
 		properties.add(Propertie.create("name", PropertieType.TEXT));
 		properties.add(Propertie.create("age", PropertieType.INTEGER));
 		properties.add(Propertie.create("active", PropertieType.BOOLEAN));
 		properties.add(Propertie.create("height", PropertieType.DECIMAL));
 		properties.add(Propertie.createEndpointType("father", "person"));
-		properties.add(Propertie.create("job", PropertieType.ENUMETARED));
+		properties.add(Propertie.createEnumeratorType("enumerator", enumeratorTest));
 		properties.add(Propertie.createListType("children", PropertieType.ENDPOINT));
-
-		Version v1 = Version.create("v1");
-		yawp.save(v1);
 
 		yawp.saveWithHooks(Endpoint.create("person", v1, properties));
 	}
@@ -134,9 +139,26 @@ public class DataValidationTest extends EndpointTestCaseBase {
 	@Test(expected = InvalidFieldTypeException.class)
 	public void decimalInvalidNumberPropertyTest() {
 		RestMethodsService feature = feature(RestMethodsService.class);
-
 		String testingProperty = "height";
 		createInstance(feature, newJsonObjectBoolean(testingProperty, true));
+	}
+
+	@Test
+	public void enumeratorPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "enumerator";
+		assertEquals(newJsonObjectString(testingProperty, "ADMIN"), createInstance(feature, newJsonObjectString(testingProperty, "ADMIN")).toString());
+		assertEquals(newJsonObjectString(testingProperty, "0"), createInstance(feature, newJsonObjectNumber(testingProperty, 0)).toString());
+		assertEquals(newJsonObjectString(testingProperty, "true"), createInstance(feature, newJsonObjectBoolean(testingProperty, true)).toString());
+		assertFalse(createInstance(feature, newJsonObjectBoolean(testingProperty, null)).has(testingProperty));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void enumeratorInexistentPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+
+		String testingProperty = "enumerator";
+		createInstance(feature, newJsonObjectString(testingProperty, "InexistentEnumerator"));
 	}
 
 	private JsonObject createInstance(RestMethodsService feature, String jsonString) {

@@ -37,7 +37,7 @@ public enum PropertieType {
 			return json.getAsJsonArray();
 		}
 	},
-	ENUMETARED {
+	ENUMERATOR {
 		@Override
 		public String getPropertie(JsonElement json) {
 			return json.getAsString();

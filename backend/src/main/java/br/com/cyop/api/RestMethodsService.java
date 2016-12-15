@@ -1,6 +1,5 @@
 package br.com.cyop.api;
 
-import br.com.cyop.endpoint.PropertieType;
 import br.com.cyop.exception.InvalidFieldTypeException;
 import br.com.cyop.version.Version;
 import br.com.cyop.version.VersionService;
@@ -65,9 +64,10 @@ public class RestMethodsService extends Feature {
 
 	private void processPropertie(JsonObject instanceJson, JsonElement jsonElement, Propertie propertie) {
 		String propertieName = propertie.getName();
+		String valueAsString = jsonElement.getAsString();
 		switch (propertie.getType()) {
 			case TEXT:
-				instanceJson.addProperty(propertieName, jsonElement.getAsString());
+				instanceJson.addProperty(propertieName, valueAsString);
 				break;
 			case INTEGER:
 				try {
@@ -77,10 +77,9 @@ public class RestMethodsService extends Feature {
 				}
 				break;
 			case BOOLEAN:
-				String value = jsonElement.getAsString();
-				if ("1". equals(value) || "true".equals(value)) {
+				if ("1". equals(valueAsString) || "true".equals(valueAsString)) {
 					instanceJson.addProperty(propertieName, true);
-				} else if ("0". equals(value) || "false".equals(value)) {
+				} else if ("0". equals(valueAsString) || "false".equals(valueAsString)) {
 					instanceJson.addProperty(propertieName, false);
 				} else {
 					throw new InvalidFieldTypeException();
@@ -90,6 +89,13 @@ public class RestMethodsService extends Feature {
 				try {
 					instanceJson.addProperty(propertieName, jsonElement.getAsBigDecimal());
 				} catch(NumberFormatException e) {
+					throw new InvalidFieldTypeException();
+				}
+				break;
+			case ENUMERATOR:
+				if (propertie.getEnumeratorType().fetch().getValues().contains(valueAsString)) {
+					instanceJson.addProperty(propertieName, valueAsString);
+				} else {
 					throw new InvalidFieldTypeException();
 				}
 				break;

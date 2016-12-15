@@ -1,5 +1,6 @@
 package br.com.cyop.version;
 
+import br.com.cyop.exception.NotFoundException;
 import io.yawp.testing.EndpointTestCaseBase;
 import org.junit.Test;
 
@@ -12,11 +13,16 @@ public class VersionServiceTest extends EndpointTestCaseBase {
 	@Test
 	public void newVersionTest() {
 		VersionService feature = feature(VersionService.class);
-		assertNull(feature.getVersionByUrl("v1"));
 		feature.newVersion();
 		assertNotNull(feature.getVersionByUrl("v1"));
 		feature.newVersion();
 		assertNotNull(feature.getVersionByUrl("v2"));
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void versionNotFoundTest() {
+		VersionService feature = feature(VersionService.class);
+		assertNull(feature.getVersionByUrl("v1"));
 	}
 
 	@Test(expected = RuntimeException.class)

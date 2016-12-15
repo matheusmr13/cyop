@@ -1,5 +1,6 @@
 package br.com.cyop.version;
 
+import br.com.cyop.exception.NotFoundException;
 import io.yawp.repository.Feature;
 
 import java.util.Date;
@@ -27,6 +28,10 @@ public class VersionService extends Feature {
 		if (versionWithUrl.size() > 1) {
 			throw new RuntimeException("More then one active version with same url");
 		}
-		return versionWithUrl.size() == 0 ? null : versionWithUrl.get(0);
+		if (versionWithUrl.size() == 0) {
+			throw new NotFoundException();
+		}
+
+		return versionWithUrl.get(0);
 	}
 }
