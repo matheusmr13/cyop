@@ -86,6 +86,13 @@ public class RestMethodsService extends Feature {
 					throw new InvalidFieldTypeException();
 				}
 				break;
+			case DECIMAL:
+				try {
+					instanceJson.addProperty(propertieName, jsonElement.getAsBigDecimal());
+				} catch(NumberFormatException e) {
+					throw new InvalidFieldTypeException();
+				}
+				break;
 		}
 	}
 

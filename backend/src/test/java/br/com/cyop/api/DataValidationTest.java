@@ -41,8 +41,8 @@ public class DataValidationTest extends EndpointTestCaseBase {
 		RestMethodsService feature = feature(RestMethodsService.class);
 		String testingProperty = "name";
 		assertEquals(newJsonObjectString(testingProperty, "Matheus"), createInstance(feature, newJsonObjectString(testingProperty, "Matheus")).toString());
-		assertEquals(newJsonObjectString(testingProperty, "1000"), createInstance(feature, newJsonObjectString(testingProperty, "1000")).toString());
-		assertEquals(newJsonObjectString(testingProperty, "true"), createInstance(feature, newJsonObjectString(testingProperty, "true")).toString());
+		assertEquals(newJsonObjectString(testingProperty, "1000"), createInstance(feature, newJsonObjectNumber(testingProperty, 1000)).toString());
+		assertEquals(newJsonObjectString(testingProperty, "true"), createInstance(feature, newJsonObjectBoolean(testingProperty, true)).toString());
 		assertEquals(newJsonObjectString(testingProperty, "null"), createInstance(feature, newJsonObjectString(testingProperty, "null")).toString());
 		assertFalse(createInstance(feature, newJsonObjectString(testingProperty, null)).has(testingProperty));
 	}
@@ -106,6 +106,37 @@ public class DataValidationTest extends EndpointTestCaseBase {
 		createInstance(feature, newJsonObjectNumber(testingProperty, 2));
 	}
 
+	@Test
+	public void decimalPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "height";
+		assertEquals(newJsonObjectNumber(testingProperty, 1), createInstance(feature, newJsonObjectNumber(testingProperty, 1)).toString());
+		assertEquals(newJsonObjectNumber(testingProperty, 1.2), createInstance(feature, newJsonObjectNumber(testingProperty, 1.2)).toString());
+		assertEquals(newJsonObjectNumber(testingProperty, 0), createInstance(feature, newJsonObjectNumber(testingProperty, 0)).toString());
+		assertEquals(newJsonObjectNumber(testingProperty, 123.123), createInstance(feature, newJsonObjectString(testingProperty, "123.123")).toString());
+		assertFalse(createInstance(feature, newJsonObjectBoolean(testingProperty, null)).has(testingProperty));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void decimalInvalidLetterPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "height";
+		createInstance(feature, newJsonObjectString(testingProperty, "stringTest"));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void decimalInvalidEmptyPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "height";
+		createInstance(feature, newJsonObjectString(testingProperty, ""));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void decimalInvalidNumberPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "height";
+		createInstance(feature, newJsonObjectBoolean(testingProperty, true));
+	}
 
 	private JsonObject createInstance(RestMethodsService feature, String jsonString) {
 		JsonObject instance = feature.createInstance("v1", "person", jsonString);
