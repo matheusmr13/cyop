@@ -1,5 +1,7 @@
 package br.com.cyop.api;
 
+import br.com.cyop.endpoint.PropertieType;
+import br.com.cyop.exception.InvalidFieldTypeException;
 import br.com.cyop.version.Version;
 import br.com.cyop.version.VersionService;
 import com.google.gson.JsonParser;
@@ -54,12 +56,37 @@ public class RestMethodsService extends Feature {
 				if (jsonElement.isJsonNull()) {
 					instanceJson.remove(propertieName);
 				} else {
-					instanceJson.addProperty(propertieName, jsonElement.getAsString());
-//					propertie.getType().addProperty(instanceJson, jsonElement, propertieName);
+					processPropertie(instanceJson, jsonElement, propertie);
 				}
 			}
 		}
 		return instance;
+	}
+
+	private void processPropertie(JsonObject instanceJson, JsonElement jsonElement, Propertie propertie) {
+		String propertieName = propertie.getName();
+		switch (propertie.getType()) {
+			case TEXT:
+				instanceJson.addProperty(propertieName, jsonElement.getAsString());
+				break;
+			case INTEGER:
+				try {
+					instanceJson.addProperty(propertieName, jsonElement.getAsInt());
+				} catch(NumberFormatException e) {
+					throw new InvalidFieldTypeException();
+				}
+				break;
+			case BOOLEAN:
+				String value = jsonElement.getAsString();
+				if ("1". equals(value) || "true".equals(value)) {
+					instanceJson.addProperty(propertieName, true);
+				} else if ("0". equals(value) || "false".equals(value)) {
+					instanceJson.addProperty(propertieName, false);
+				} else {
+					throw new InvalidFieldTypeException();
+				}
+				break;
+		}
 	}
 
 	public List<JsonObject> getListOfInstance(String version, String entityName) {

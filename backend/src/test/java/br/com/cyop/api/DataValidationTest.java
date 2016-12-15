@@ -3,8 +3,8 @@ package br.com.cyop.api;
 import br.com.cyop.endpoint.Endpoint;
 import br.com.cyop.endpoint.Propertie;
 import br.com.cyop.endpoint.PropertieType;
+import br.com.cyop.exception.InvalidFieldTypeException;
 import br.com.cyop.version.Version;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.yawp.testing.EndpointTestCaseBase;
 import org.junit.Before;
@@ -40,10 +40,10 @@ public class DataValidationTest extends EndpointTestCaseBase {
 	public void textPropertyTest() {
 		RestMethodsService feature = feature(RestMethodsService.class);
 		String testingProperty = "name";
-		assertEquals("Matheus", createInstance(feature, newJsonObjectString(testingProperty, "Matheus")).get(testingProperty).getAsString());
-		assertEquals("1000", createInstance(feature, newJsonObjectString(testingProperty, "1000")).get(testingProperty).getAsString());
-		assertEquals("true", createInstance(feature, newJsonObjectString(testingProperty, "true")).get(testingProperty).getAsString());
-		assertEquals("null", createInstance(feature, newJsonObjectString(testingProperty, "null")).get(testingProperty).getAsString());
+		assertEquals(newJsonObjectString(testingProperty, "Matheus"), createInstance(feature, newJsonObjectString(testingProperty, "Matheus")).toString());
+		assertEquals(newJsonObjectString(testingProperty, "1000"), createInstance(feature, newJsonObjectString(testingProperty, "1000")).toString());
+		assertEquals(newJsonObjectString(testingProperty, "true"), createInstance(feature, newJsonObjectString(testingProperty, "true")).toString());
+		assertEquals(newJsonObjectString(testingProperty, "null"), createInstance(feature, newJsonObjectString(testingProperty, "null")).toString());
 		assertFalse(createInstance(feature, newJsonObjectString(testingProperty, null)).has(testingProperty));
 	}
 
@@ -51,13 +51,66 @@ public class DataValidationTest extends EndpointTestCaseBase {
 	public void integerPropertyTest() {
 		RestMethodsService feature = feature(RestMethodsService.class);
 		String testingProperty = "age";
-		assertEquals(1000, createInstance(feature, newJsonObjectNumber(testingProperty, 1000)).get(testingProperty).getAsInt());
-		assertEquals(1000, createInstance(feature, newJsonObjectString(testingProperty, "1000")).get(testingProperty).getAsInt());
+		assertEquals(newJsonObjectNumber(testingProperty, 1000), createInstance(feature, newJsonObjectNumber(testingProperty, 1000)).toString());
+		assertEquals(newJsonObjectNumber(testingProperty, 1000), createInstance(feature, newJsonObjectString(testingProperty, "1000")).toString());
 		assertFalse(createInstance(feature, newJsonObjectNumber(testingProperty, null)).has(testingProperty));
 	}
 
+	@Test(expected = InvalidFieldTypeException.class)
+	public void integerInvalidLetterPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "age";
+		createInstance(feature, newJsonObjectString(testingProperty, "stringTest"));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void integerInvalidEmptyPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "age";
+		createInstance(feature, newJsonObjectString(testingProperty, ""));
+	}
+
+	@Test
+	public void booleanPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "active";
+		assertEquals(newJsonObjectBoolean(testingProperty, true), createInstance(feature, newJsonObjectBoolean(testingProperty, true)).toString());
+		assertEquals(newJsonObjectBoolean(testingProperty, true), createInstance(feature, newJsonObjectString(testingProperty, "true")).toString());
+		assertEquals(newJsonObjectBoolean(testingProperty, true), createInstance(feature, newJsonObjectString(testingProperty, "1")).toString());
+		assertEquals(newJsonObjectBoolean(testingProperty, true), createInstance(feature, newJsonObjectNumber(testingProperty, 1)).toString());
+		assertEquals(newJsonObjectBoolean(testingProperty, false), createInstance(feature, newJsonObjectBoolean(testingProperty, false)).toString());
+		assertEquals(newJsonObjectBoolean(testingProperty, false), createInstance(feature, newJsonObjectString(testingProperty, "false")).toString());
+		assertEquals(newJsonObjectBoolean(testingProperty, false), createInstance(feature, newJsonObjectString(testingProperty, "0")).toString());
+		assertEquals(newJsonObjectBoolean(testingProperty, false), createInstance(feature, newJsonObjectNumber(testingProperty, 0)).toString());
+		assertFalse(createInstance(feature, newJsonObjectBoolean(testingProperty, null)).has(testingProperty));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void booleanInvalidLetterPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "active";
+		createInstance(feature, newJsonObjectString(testingProperty, "stringTest"));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void booleanInvalidEmptyPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "active";
+		createInstance(feature, newJsonObjectString(testingProperty, ""));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void booleanInvalidNumberPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "active";
+		createInstance(feature, newJsonObjectNumber(testingProperty, 2));
+	}
+
+
 	private JsonObject createInstance(RestMethodsService feature, String jsonString) {
-		return feature.createInstance("v1", "person", jsonString);
+		JsonObject instance = feature.createInstance("v1", "person", jsonString);
+		instance.remove("id");
+		return instance;
 	}
 
 	private String newJsonObjectString(String key, String value) {
