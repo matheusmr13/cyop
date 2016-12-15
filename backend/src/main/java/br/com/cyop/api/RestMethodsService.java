@@ -103,9 +103,6 @@ public class RestMethodsService extends Feature {
 			case ENDPOINT:
 				try {
 					Instance instance = findInstanceById(property.getEndpointId(), jsonElement.getAsLong());
-					if (instance == null) {
-						throw new InvalidFieldTypeException();
-					}
 					instanceJson.addProperty(propertieName, valueAsString);
 				} catch(NumberFormatException e) {
 					throw new InvalidFieldTypeException();
