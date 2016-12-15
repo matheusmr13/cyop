@@ -134,6 +134,7 @@ public class DataValidationTest extends EndpointTestCaseBase {
 	@Test(expected = InvalidFieldTypeException.class)
 	public void decimalInvalidNumberPropertyTest() {
 		RestMethodsService feature = feature(RestMethodsService.class);
+
 		String testingProperty = "height";
 		createInstance(feature, newJsonObjectBoolean(testingProperty, true));
 	}
