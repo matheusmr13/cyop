@@ -37,7 +37,6 @@ public class DataValidationTest extends EndpointTestCaseBase {
 		properties.add(Propertie.create("active", PropertieType.BOOLEAN));
 		properties.add(Propertie.create("height", PropertieType.DECIMAL));
 		properties.add(Propertie.createEnumeratorType("enumerator", enumeratorTest));
-		properties.add(Propertie.createListType("children", PropertieType.ENDPOINT));
 
 		Endpoint person = yawp.saveWithHooks(Endpoint.create("person", v1, properties));
 
@@ -190,7 +189,6 @@ public class DataValidationTest extends EndpointTestCaseBase {
 		String testingProperty = "father";
 		createInstance(feature, newJsonObjectString(testingProperty, "stringTest"));
 	}
-
 
 	private JsonObject createInstance(RestMethodsService feature, String jsonString) {
 		JsonObject instance = feature.createInstance("v1", "person", jsonString);

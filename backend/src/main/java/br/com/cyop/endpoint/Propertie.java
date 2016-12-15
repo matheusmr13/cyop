@@ -43,12 +43,6 @@ public class Propertie {
 		return propertie;
 	}
 
-	public static Propertie createListType(String name, PropertieType listType) {
-		Propertie propertie = create(name, PropertieType.LIST);
-		propertie.listType = listType;
-		return propertie;
-	}
-
 	public static Propertie createEnumeratorType(String name, Enumerator enumeratorType) {
 		Propertie propertie = create(name, PropertieType.ENUMERATOR);
 		propertie.enumeratorType = enumeratorType.getId();
@@ -59,12 +53,6 @@ public class Propertie {
 		Propertie propertie = create(name, PropertieType.ENDPOINT);
 		propertie.endpointName = endpoint.getUrl();
 		propertie.endpointId = endpoint.getId();
-		return propertie;
-	}
-
-	public static Propertie createEndpointListType(String name, String endpointType) {
-		Propertie propertie = createListType(name, PropertieType.ENDPOINT);
-		propertie.endpointName = endpointType;
 		return propertie;
 	}
 }
