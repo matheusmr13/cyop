@@ -9,6 +9,8 @@ import io.yawp.repository.Feature;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.yawp.repository.IdRef;
+import io.yawp.repository.query.NoResultException;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.cyop.endpoint.Endpoint;
@@ -99,6 +101,17 @@ public class RestMethodsService extends Feature {
 					throw new InvalidFieldTypeException();
 				}
 				break;
+			case ENDPOINT:
+				try {
+					Instance instance = findInstanceById(propertie.getEndpointId(), jsonElement.getAsLong());
+					if (instance == null) {
+						throw new InvalidFieldTypeException();
+					}
+					instanceJson.addProperty(propertieName, valueAsString);
+				} catch(NumberFormatException e) {
+					throw new InvalidFieldTypeException();
+				}
+				break;
 		}
 	}
 
@@ -120,32 +133,32 @@ public class RestMethodsService extends Feature {
 
 	public Instance getInstanceById(String version, String entityName, Long id) {
 		this.validateField(entityName);
-		Instance instance = this.findInstanceById(this.getEndpoint(version, entityName), id);
+		Instance instance = this.findInstanceById(this.getEndpoint(version, entityName).getId(), id);
 		return instance;
 	}
 
 	public JsonObject updateInstance(String version, String entityName, Long id, String instanceJson) {
 		this.validateField(entityName);
 		this.validateField(id);
-		Endpoint entity = this.getEndpoint(version, entityName);
+		Endpoint endpoint = this.getEndpoint(version, entityName);
 
-		Instance instance = this.findInstanceById(entity, id);
-		this.setAndValidateProperties(instance, instanceJson, entity);
+		Instance instance = this.findInstanceById(endpoint.getId(), id);
+		this.setAndValidateProperties(instance, instanceJson, endpoint);
 		return yawp.save(instance).object;
 	}
 
 	public JsonObject deleteEntity(String version, String entityName, Long id) {
 		validateField(entityName);
 		validateField(id);
-		Endpoint entity = getEndpoint(version, entityName);
+		Endpoint endpoint = getEndpoint(version, entityName);
 
-		Instance instance = findInstanceById(entity, id);
+		Instance instance = findInstanceById(endpoint.getId(), id);
 		yawp.destroy(instance.yawpId);
 		return instance.object;
 	}
 
-	private Instance findInstanceById(Endpoint entity, Long id) {
-		Instance first = yawp(Instance.class).where("entityId", "=", entity.getId()).and("id", "=", id).first();
+	private Instance findInstanceById(IdRef<Endpoint> endpointId, Long id) {
+		Instance first = yawp(Instance.class).where("entityId", "=", endpointId).and("id", "=", id).first();
 		if (first == null) {
 			throw new NotFoundException();
 		}

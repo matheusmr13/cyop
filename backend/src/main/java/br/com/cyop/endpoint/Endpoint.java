@@ -37,6 +37,10 @@ public class Endpoint {
 		return maxId;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
 	public static Endpoint create(String name, Version version, List<Propertie> properties) {
 		Endpoint endpoint = new Endpoint();
 		endpoint.url = name;

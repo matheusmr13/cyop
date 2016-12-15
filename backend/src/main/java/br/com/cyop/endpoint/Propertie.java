@@ -6,7 +6,8 @@ import io.yawp.repository.IdRef;
 public class Propertie {
 	PropertieType type;
 	PropertieType listType;
-	String endpointType;
+	String endpointName;
+	IdRef<Endpoint> endpointId;
 	IdRef<Enumerator> enumeratorType;
 	String name;
 	Object defaultValue;
@@ -25,6 +26,14 @@ public class Propertie {
 
 	public IdRef<Enumerator> getEnumeratorType() {
 		return enumeratorType;
+	}
+
+	public IdRef<Endpoint> getEndpointId() {
+		return endpointId;
+	}
+
+	public String getEndpointName() {
+		return endpointName;
 	}
 
 	public static Propertie create(String name, PropertieType type) {
@@ -46,15 +55,16 @@ public class Propertie {
 		return propertie;
 	}
 
-	public static Propertie createEndpointType(String name, String endpointType) {
+	public static Propertie createEndpointType(String name, Endpoint endpoint) {
 		Propertie propertie = create(name, PropertieType.ENDPOINT);
-		propertie.endpointType = endpointType;
+		propertie.endpointName = endpoint.getUrl();
+		propertie.endpointId = endpoint.getId();
 		return propertie;
 	}
 
 	public static Propertie createEndpointListType(String name, String endpointType) {
 		Propertie propertie = createListType(name, PropertieType.ENDPOINT);
-		propertie.endpointType = endpointType;
+		propertie.endpointName = endpointType;
 		return propertie;
 	}
 }

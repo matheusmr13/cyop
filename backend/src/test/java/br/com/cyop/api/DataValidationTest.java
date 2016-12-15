@@ -6,6 +6,7 @@ import br.com.cyop.endpoint.PropertieType;
 import br.com.cyop.enumerator.Enumerator;
 import br.com.cyop.enumerator.EnumeratorService;
 import br.com.cyop.exception.InvalidFieldTypeException;
+import br.com.cyop.exception.NotFoundException;
 import br.com.cyop.version.Version;
 import com.google.gson.JsonObject;
 import io.yawp.testing.EndpointTestCaseBase;
@@ -22,9 +23,10 @@ import static org.junit.Assert.assertTrue;
 
 public class DataValidationTest extends EndpointTestCaseBase {
 
+	Version v1;
 	@Before
 	public void before() {
-		Version v1 = Version.create("v1");
+		v1 = Version.create("v1");
 		yawp.save(v1);
 
 		Enumerator enumeratorTest = feature(EnumeratorService.class).createInstance("v1", "enumeratorTest", Arrays.asList("ADMIN", "0", "true"));
@@ -34,11 +36,13 @@ public class DataValidationTest extends EndpointTestCaseBase {
 		properties.add(Propertie.create("age", PropertieType.INTEGER));
 		properties.add(Propertie.create("active", PropertieType.BOOLEAN));
 		properties.add(Propertie.create("height", PropertieType.DECIMAL));
-		properties.add(Propertie.createEndpointType("father", "person"));
 		properties.add(Propertie.createEnumeratorType("enumerator", enumeratorTest));
 		properties.add(Propertie.createListType("children", PropertieType.ENDPOINT));
 
-		yawp.saveWithHooks(Endpoint.create("person", v1, properties));
+		Endpoint person = yawp.saveWithHooks(Endpoint.create("person", v1, properties));
+
+		person.getProperties().add(Propertie.createEndpointType("father", person));
+		yawp.save(person);
 	}
 
 	@Test
@@ -160,6 +164,33 @@ public class DataValidationTest extends EndpointTestCaseBase {
 		String testingProperty = "enumerator";
 		createInstance(feature, newJsonObjectString(testingProperty, "InexistentEnumerator"));
 	}
+
+	@Test
+	public void endpointPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+
+		String fatherId = feature.createInstance("v1", "person", newJsonObjectString("name", "father")).get("id").getAsString();
+
+		String testingProperty = "father";
+		assertEquals(newJsonObjectString(testingProperty, fatherId), createInstance(feature, newJsonObjectString(testingProperty, fatherId)).toString());
+		assertFalse(createInstance(feature, newJsonObjectBoolean(testingProperty, null)).has(testingProperty));
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void endpointInexistentPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+
+		String testingProperty = "father";
+		createInstance(feature, newJsonObjectString(testingProperty, "999999"));
+	}
+
+	@Test(expected = InvalidFieldTypeException.class)
+	public void endpointInvalidPropertyTest() {
+		RestMethodsService feature = feature(RestMethodsService.class);
+		String testingProperty = "father";
+		createInstance(feature, newJsonObjectString(testingProperty, "stringTest"));
+	}
+
 
 	private JsonObject createInstance(RestMethodsService feature, String jsonString) {
 		JsonObject instance = feature.createInstance("v1", "person", jsonString);

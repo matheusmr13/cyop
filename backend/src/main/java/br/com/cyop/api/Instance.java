@@ -20,6 +20,7 @@ public class Instance {
 
 	@Index
 	IdRef<Endpoint> entityId;
+	String endpointName;
 
 	@Json
 	JsonObject object;
@@ -31,6 +32,7 @@ public class Instance {
 		Instance instance = new Instance();
 		instance.id = endpoint.getMaxId();
 		instance.entityId = endpoint.getId();
+		instance.endpointName = endpoint.getUrl();
 		instance.object = new JsonObject();
 		instance.object.addProperty("id", instance.id);
 		return instance;
@@ -50,5 +52,9 @@ public class Instance {
 
 	public Long getId() {
 		return id;
+	}
+
+	public String getEndpointName() {
+		return endpointName;
 	}
 }
