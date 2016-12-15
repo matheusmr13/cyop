@@ -110,6 +110,11 @@ public class SimpleApiTest extends EndpointTestCaseBase {
 		assertNotNull(feature(RestMethodsService.class).getInstanceById("v1", "foo", 2l));
 	}
 
+	@Test(expected = NotFoundException.class)
+	public void fintInstanceByIdWithNullIdTest() {
+		assertNotNull(feature(RestMethodsService.class).getInstanceById("v1", "foo", null));
+	}
+
 	@Test
 	public void updateInstanceTest() {
 		RestMethodsService feature = feature(RestMethodsService.class);
@@ -139,8 +144,13 @@ public class SimpleApiTest extends EndpointTestCaseBase {
 	}
 
 	@Test(expected = NotFoundException.class)
-	public void updateInstanceWithNullIdTest() {
+	public void updateInstanceWithNullVersionTest() {
 		feature(RestMethodsService.class).updateInstance(null, "foo", 2l, "{}");
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void updateInstanceWithNullIdTest() {
+		feature(RestMethodsService.class).updateInstance("v1", "foo", null, "{}");
 	}
 
 	@Test
@@ -174,6 +184,11 @@ public class SimpleApiTest extends EndpointTestCaseBase {
 	@Test(expected = NotFoundException.class)
 	public void deleteInstanceWithInexistingIdTest() {
 		feature(RestMethodsService.class).deleteEntity("v1", "foo", 2l);
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void deleteInstanceWithNullIdTest() {
+		feature(RestMethodsService.class).deleteEntity("v1", "foo", null);
 	}
 
 	@Test

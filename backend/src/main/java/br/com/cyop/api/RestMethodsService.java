@@ -129,6 +129,7 @@ public class RestMethodsService extends Feature {
 
 	public Instance getInstanceById(String version, String entityName, Long id) {
 		this.validateField(entityName);
+		this.validateField(id);
 		Instance instance = this.findInstanceById(this.getEndpoint(version, entityName).getId(), id);
 		return instance;
 	}
