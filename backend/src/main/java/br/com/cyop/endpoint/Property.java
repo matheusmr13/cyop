@@ -6,7 +6,6 @@ import io.yawp.repository.IdRef;
 public class Property {
 	PropertyType type;
 	PropertyType listType;
-	String endpointName;
 	IdRef<Endpoint> endpointId;
 	IdRef<Enumerator> enumeratorType;
 	String name;
@@ -32,10 +31,6 @@ public class Property {
 		return endpointId;
 	}
 
-	public String getEndpointName() {
-		return endpointName;
-	}
-
 	public static Property createWithDefault(String name, PropertyType type, Object defaultValue) {
 		Property property = create(name, type);
 		property.defaultValue = defaultValue;
@@ -57,7 +52,6 @@ public class Property {
 
 	public static Property createEndpointType(String name, Endpoint endpoint) {
 		Property property = create(name, PropertyType.ENDPOINT);
-		property.endpointName = endpoint.getUrl();
 		property.endpointId = endpoint.getId();
 		return property;
 	}
