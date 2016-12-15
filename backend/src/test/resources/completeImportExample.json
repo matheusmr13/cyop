@@ -20,16 +20,6 @@
         "type": "endpoint",
         "referer": "auth_entity"
       }, {
-        "name": "children",
-        "type": "list",
-        "listtype": "endpoint",
-        "referer": "person"
-      }, {
-        "name": "dream_jobs",
-        "type": "list",
-        "listtype": "enumerator",
-        "referer": "job"
-      }, {
         "name": "actual_job",
         "type": "enumerator",
         "referer": "job"

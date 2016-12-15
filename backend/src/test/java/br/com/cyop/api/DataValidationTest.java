@@ -1,8 +1,8 @@
 package br.com.cyop.api;
 
 import br.com.cyop.endpoint.Endpoint;
-import br.com.cyop.endpoint.Propertie;
-import br.com.cyop.endpoint.PropertieType;
+import br.com.cyop.endpoint.Property;
+import br.com.cyop.endpoint.PropertyType;
 import br.com.cyop.enumerator.Enumerator;
 import br.com.cyop.enumerator.EnumeratorService;
 import br.com.cyop.exception.InvalidFieldTypeException;
@@ -31,16 +31,16 @@ public class DataValidationTest extends EndpointTestCaseBase {
 
 		Enumerator enumeratorTest = feature(EnumeratorService.class).createInstance("v1", "enumeratorTest", Arrays.asList("ADMIN", "0", "true"));
 
-		List<Propertie> properties = new ArrayList<>();
-		properties.add(Propertie.create("name", PropertieType.TEXT));
-		properties.add(Propertie.create("age", PropertieType.INTEGER));
-		properties.add(Propertie.create("active", PropertieType.BOOLEAN));
-		properties.add(Propertie.create("height", PropertieType.DECIMAL));
-		properties.add(Propertie.createEnumeratorType("enumerator", enumeratorTest));
+		List<Property> properties = new ArrayList<>();
+		properties.add(Property.create("name", PropertyType.TEXT));
+		properties.add(Property.create("age", PropertyType.INTEGER));
+		properties.add(Property.create("active", PropertyType.BOOLEAN));
+		properties.add(Property.create("height", PropertyType.DECIMAL));
+		properties.add(Property.createEnumeratorType("enumerator", enumeratorTest));
 
 		Endpoint person = yawp.saveWithHooks(Endpoint.create("person", v1, properties));
 
-		person.getProperties().add(Propertie.createEndpointType("father", person));
+		person.getProperties().add(Property.createEndpointType("father", person));
 		yawp.save(person);
 	}
 

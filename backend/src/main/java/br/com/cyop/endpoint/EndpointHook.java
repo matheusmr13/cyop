@@ -9,13 +9,13 @@ public class EndpointHook extends Hook<Endpoint> {
 	@Override
 	public void beforeSave(Endpoint entity) {
 		if (entity.getId() == null) {
-			Propertie idPropertie = new Propertie();
-			idPropertie.name = "id";
-			idPropertie.type = PropertieType.INTEGER;
+			Property idProperty = new Property();
+			idProperty.name = "id";
+			idProperty.type = PropertyType.INTEGER;
 			if (entity.properties == null) {
-				entity.properties = new ArrayList<Propertie>();
+				entity.properties = new ArrayList<Property>();
 			}
-			entity.properties.add(idPropertie);
+			entity.properties.add(idProperty);
 		}
 	}
 

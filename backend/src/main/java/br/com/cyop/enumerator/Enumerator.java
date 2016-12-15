@@ -1,6 +1,5 @@
 package br.com.cyop.enumerator;
 
-import br.com.cyop.endpoint.Propertie;
 import br.com.cyop.version.Version;
 import io.yawp.repository.IdRef;
 import io.yawp.repository.annotations.Id;

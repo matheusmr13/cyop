@@ -18,7 +18,7 @@ public class Endpoint {
 	String url;
 
 	@Json
-	List<Propertie> properties;
+	List<Property> properties;
 
 	@Index
 	IdRef<Version> version;
@@ -29,7 +29,7 @@ public class Endpoint {
 		return id;
 	}
 
-	public List<Propertie> getProperties() {
+	public List<Property> getProperties() {
 		return properties;
 	}
 
@@ -41,7 +41,7 @@ public class Endpoint {
 		return url;
 	}
 
-	public static Endpoint create(String name, Version version, List<Propertie> properties) {
+	public static Endpoint create(String name, Version version, List<Property> properties) {
 		Endpoint endpoint = new Endpoint();
 		endpoint.url = name;
 		endpoint.properties = properties;

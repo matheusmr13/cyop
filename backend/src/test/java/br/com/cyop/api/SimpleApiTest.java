@@ -16,16 +16,16 @@ import org.junit.Test;
 import com.google.gson.JsonObject;
 
 import br.com.cyop.endpoint.Endpoint;
-import br.com.cyop.endpoint.Propertie;
-import br.com.cyop.endpoint.PropertieType;
+import br.com.cyop.endpoint.Property;
+import br.com.cyop.endpoint.PropertyType;
 import br.com.cyop.exception.NotFoundException;
 
 public class SimpleApiTest extends EndpointTestCaseBase {
 
 	@Before
 	public void before() {
-		List<Propertie> properties = new ArrayList<>();
-		properties.add(Propertie.create("bar", PropertieType.TEXT));
+		List<Property> properties = new ArrayList<>();
+		properties.add(Property.create("bar", PropertyType.TEXT));
 
 		Version v1 = Version.create("v1");
 		yawp.save(v1);

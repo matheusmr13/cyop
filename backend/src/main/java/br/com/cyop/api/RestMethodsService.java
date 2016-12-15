@@ -10,12 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.yawp.repository.IdRef;
-import io.yawp.repository.query.NoResultException;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.cyop.endpoint.Endpoint;
 import br.com.cyop.endpoint.EndpointService;
-import br.com.cyop.endpoint.Propertie;
+import br.com.cyop.endpoint.Property;
 import br.com.cyop.exception.NotFoundException;
 
 import com.google.gson.JsonElement;
@@ -24,21 +23,21 @@ import com.google.gson.JsonObject;
 public class RestMethodsService extends Feature {
 
 	public JsonObject createInstance(String version, String entityName, String instanceJson) {
-		validateField(entityName);
-		Endpoint endpoint = getEndpoint(version, entityName);
+		this.validateField(entityName);
+		Endpoint endpoint = this.getEndpoint(version, entityName);
 		feature(EndpointService.class).updateId(endpoint);
 
 		Instance instance = Instance.create(endpoint);
-		setAndValidateProperties(instance, instanceJson, endpoint);
-		setInstanceDefaults(endpoint, instance);
+		this.setAndValidateProperties(instance, instanceJson, endpoint);
+		this.setInstanceDefaults(endpoint, instance);
 		return yawp.save(instance).object;
 	}
 
 	private void setInstanceDefaults(Endpoint endpoint, Instance instance) {
-		for (Propertie propertie : endpoint.getProperties()) {
-			JsonElement propertieJson = instance.object.get(propertie.getName());
-			if (propertieJson == null && propertie.getDefaultValue() != null) {
-				instance.object.addProperty(propertie.getName(), propertie.getDefaultValue().toString());
+		for (Property property : endpoint.getProperties()) {
+			JsonElement propertieJson = instance.object.get(property.getName());
+			if (propertieJson == null && property.getDefaultValue() != null) {
+				instance.object.addProperty(property.getName(), property.getDefaultValue().toString());
 			}
 		}
 	}
@@ -50,24 +49,24 @@ public class RestMethodsService extends Feature {
 		JsonObject instanceJson = instance.getObject();
 		JsonObject toMergeInstanceJson = new JsonParser().parse(toMergeInstanceStringJson).getAsJsonObject();
 		toMergeInstanceJson.remove("id");
-		for (Propertie propertie : endpoint.getProperties()) {
-			String propertieName = propertie.getName();
+		for (Property property : endpoint.getProperties()) {
+			String propertieName = property.getName();
 			if (toMergeInstanceJson.has(propertieName)) {
 				JsonElement jsonElement = toMergeInstanceJson.get(propertieName);
 				if (jsonElement.isJsonNull()) {
 					instanceJson.remove(propertieName);
 				} else {
-					processPropertie(instanceJson, jsonElement, propertie);
+					processPropertie(instanceJson, jsonElement, property);
 				}
 			}
 		}
 		return instance;
 	}
 
-	private void processPropertie(JsonObject instanceJson, JsonElement jsonElement, Propertie propertie) {
-		String propertieName = propertie.getName();
+	private void processPropertie(JsonObject instanceJson, JsonElement jsonElement, Property property) {
+		String propertieName = property.getName();
 		String valueAsString = jsonElement.getAsString();
-		switch (propertie.getType()) {
+		switch (property.getType()) {
 			case TEXT:
 				instanceJson.addProperty(propertieName, valueAsString);
 				break;
@@ -95,7 +94,7 @@ public class RestMethodsService extends Feature {
 				}
 				break;
 			case ENUMERATOR:
-				if (propertie.getEnumeratorType().fetch().getValues().contains(valueAsString)) {
+				if (property.getEnumeratorType().fetch().getValues().contains(valueAsString)) {
 					instanceJson.addProperty(propertieName, valueAsString);
 				} else {
 					throw new InvalidFieldTypeException();
@@ -103,7 +102,7 @@ public class RestMethodsService extends Feature {
 				break;
 			case ENDPOINT:
 				try {
-					Instance instance = findInstanceById(propertie.getEndpointId(), jsonElement.getAsLong());
+					Instance instance = findInstanceById(property.getEndpointId(), jsonElement.getAsLong());
 					if (instance == null) {
 						throw new InvalidFieldTypeException();
 					}
