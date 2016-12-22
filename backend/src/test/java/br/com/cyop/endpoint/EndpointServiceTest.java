@@ -23,4 +23,12 @@ public class EndpointServiceTest extends EndpointTestCaseBase {
 		assertEquals(new Long(1), endpoint.maxId);
 	}
 
+	@Test
+	public void removeCharactersFromUrl() {
+		Endpoint endpoint = new Endpoint();
+		endpoint.url = "/foo@_bar";
+		yawp.saveWithHooks(endpoint);
+		assertEquals("foo_bar", endpoint.getUrl());
+	}
+
 }
