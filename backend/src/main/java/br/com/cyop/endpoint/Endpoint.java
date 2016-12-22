@@ -49,4 +49,12 @@ public class Endpoint {
 		endpoint.version = version.getId();
 		return endpoint;
 	}
+
+	public static Endpoint create(String name, Version version) {
+		return Endpoint.create(name, version, null);
+	}
+
+	public void setProperties(List<Property> properties) {
+		this.properties = properties;
+	}
 }

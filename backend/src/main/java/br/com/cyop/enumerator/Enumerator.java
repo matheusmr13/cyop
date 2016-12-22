@@ -27,15 +27,19 @@ public class Enumerator {
 		return id;
 	}
 
+	public List<String> getValues() {
+		return values;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
 	public static Enumerator create(String name, Version version, List<String> values) {
 		Enumerator enumerator = new Enumerator();
 		enumerator.url = name;
 		enumerator.version = version.getId();
 		enumerator.values = values;
 		return enumerator;
-	}
-
-	public List<String> getValues() {
-		return values;
 	}
 }

@@ -1,0 +1,31 @@
+{
+  "endpoints": [{
+    "url": "person",
+    "properties": [{
+        "name": "name",
+        "type": "text"
+      }, {
+        "name": "age",
+        "type": "integer"
+      }, {
+        "name": "mother",
+        "type": "endpoint",
+        "referer": "person"
+      }, {
+        "name": "father",
+        "type": "endpoint",
+        "referer": "person"
+      }, {
+        "name": "actual_job",
+        "type": "enumerator",
+        "referer": "job"
+      }]
+  }],
+  "enumerators": [{
+    "name": "job",
+    "values": ["teacher", "cientist", "officer", "developer"]
+  }],
+  "api_config": {
+    "version_url": "v1"
+  }
+}
