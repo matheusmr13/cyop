@@ -115,7 +115,7 @@ var editEndpoint = function(button) {
 
 	$.ajax({
 		type: 'GET',
-		url: '/api/' + selectedTable.name,
+		url: '/api/v1/' + selectedTable.url,
 		dataType: 'json'
 	}).then(function(instances) {
 		var table = $('#endpoint-table tbody');
@@ -172,7 +172,7 @@ var editLine = function(button) {
 
 	$.ajax({
 		type: 'PUT',
-		url: '/api/' + selectedTable.name + '/' + newObject.id,
+		url: '/api/v1/' + selectedTable.url + '/' + newObject.id,
 		dataType: 'json',
 		data: {
 			instance: JSON.stringify(newObject)
@@ -186,7 +186,7 @@ var removeLine = function(button) {
 
 	$.ajax({
 		type: 'DELETE',
-		url: '/api/' + selectedTable.name + '/' + tr.find('td:first-child span').text()
+		url: '/api/v1/' + selectedTable.url + '/' + tr.find('td:first-child span').text()
 	}).then(function() {
 		tr.remove();
 	});
@@ -194,7 +194,7 @@ var removeLine = function(button) {
 
 var addNewLine = function() {
 	$.ajax({
-		url: '/api/' + selectedTable.name,
+		url: '/api/v1/' + selectedTable.url,
 		type: 'POST',
 		data: {},
 		dataType: 'json'
