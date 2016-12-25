@@ -10,7 +10,7 @@
 
 	<properties>
 		<app.id>saasapi-1469987800705</app.id>
-		<yawp.version>1.6.6</yawp.version>
+		<yawp.version>1.6.11</yawp.version>
 		<appengine.app.version>1</appengine.app.version>
 		<appengine.target.version>1.9.31</appengine.target.version>
 		<resteasy.version>3.0.18.Final</resteasy.version>
