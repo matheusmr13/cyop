@@ -65,7 +65,6 @@ public class ImportJsonServiceTest extends EndpointTestCaseBase {
 		fail();
 	}
 
-
 	private JsonObject getFile(String fileName) {
 		StringBuilder result = new StringBuilder("");
 		ClassLoader classLoader = getClass().getClassLoader();
