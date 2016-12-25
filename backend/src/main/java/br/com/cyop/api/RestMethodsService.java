@@ -1,5 +1,6 @@
 package br.com.cyop.api;
 
+import br.com.cyop.endpoint.PropertyType;
 import br.com.cyop.exception.InvalidFieldTypeException;
 import br.com.cyop.version.Version;
 import br.com.cyop.version.VersionService;
@@ -66,7 +67,8 @@ public class RestMethodsService extends Feature {
 	private void processPropertie(JsonObject instanceJson, JsonElement jsonElement, Property property) {
 		String propertieName = property.getName();
 		String valueAsString = jsonElement.getAsString();
-		switch (property.getType()) {
+		PropertyType type = property.getType();
+		switch (type) {
 			case TEXT:
 				instanceJson.addProperty(propertieName, valueAsString);
 				break;
@@ -74,7 +76,7 @@ public class RestMethodsService extends Feature {
 				try {
 					instanceJson.addProperty(propertieName, jsonElement.getAsInt());
 				} catch(NumberFormatException e) {
-					throw new InvalidFieldTypeException();
+					throw new InvalidFieldTypeException(valueAsString, propertieName, type);
 				}
 				break;
 			case BOOLEAN:
@@ -83,21 +85,21 @@ public class RestMethodsService extends Feature {
 				} else if ("0". equals(valueAsString) || "false".equals(valueAsString)) {
 					instanceJson.addProperty(propertieName, false);
 				} else {
-					throw new InvalidFieldTypeException();
+					throw new InvalidFieldTypeException(valueAsString, propertieName, type);
 				}
 				break;
 			case DECIMAL:
 				try {
 					instanceJson.addProperty(propertieName, jsonElement.getAsBigDecimal());
 				} catch(NumberFormatException e) {
-					throw new InvalidFieldTypeException();
+					throw new InvalidFieldTypeException(valueAsString, propertieName, type);
 				}
 				break;
 			case ENUMERATOR:
 				if (property.getEnumeratorType().fetch().getValues().contains(valueAsString)) {
 					instanceJson.addProperty(propertieName, valueAsString);
 				} else {
-					throw new InvalidFieldTypeException();
+					throw new InvalidFieldTypeException(valueAsString, propertieName, type);
 				}
 				break;
 			case ENDPOINT:
@@ -105,7 +107,7 @@ public class RestMethodsService extends Feature {
 					Instance instance = findInstanceById(property.getEndpointId(), jsonElement.getAsLong());
 					instanceJson.addProperty(propertieName, valueAsString);
 				} catch(NumberFormatException e) {
-					throw new InvalidFieldTypeException();
+					throw new InvalidFieldTypeException(valueAsString, propertieName, type);
 				}
 				break;
 		}

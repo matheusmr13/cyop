@@ -7,7 +7,7 @@ public class InvalidFieldTypeExceptionMapper implements javax.ws.rs.ext.Exceptio
 	@Override
 	public Response toResponse(InvalidFieldTypeException exception) {
 		exception.printStackTrace();
-		return Response.status(Response.Status.FORBIDDEN).build();
+		return Response.status(Response.Status.FORBIDDEN).entity(exception.getMessage()).build();
 	}
 
 }
