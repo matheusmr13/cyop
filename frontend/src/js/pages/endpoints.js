@@ -1,12 +1,12 @@
-var Entitie = require('./../objs/Entitie.js');
+var Endpoint = require('./../objs/Endpoint.js');
 var Renderer = require('./../general/Renderer.js');
 
-var Entities = {};
-var loadedEntities = {};
+var Endpoints = {};
+var loadedEndpoints = {};
 var selectedTable;
-var getLi = function(entity) {
-	return '<li class="collection-item" data-id="' + entity.id + '">' +
-		'<div><span class="entity-name">' + entity.name + '</span>' +
+var getLi = function(endpoint) {
+	return '<li class="collection-item" data-id="' + endpoint.id + '">' +
+		'<div><span class="endpoint-name">' + endpoint.url + '</span>' +
 		'<a href="#!" class="secondary-content remove-endpoint"><i class="material-icons">delete_forever</i></a>' +
 		'<a href="#!" class="secondary-content edit-endpoint"><i class="material-icons">edit</i></a>' +
 		'</div></li>';
@@ -50,18 +50,18 @@ var getHeaderActions = function() {
 		'</th>';
 };
 
-var getTableColumn = function(entity, column) {
+var getTableColumn = function(endpoint, column) {
 	var isId = (column == 'id'),
-		elementId = (entity.id + column),
-		hasValue = entity[column];
+		elementId = (endpoint.id + column),
+		hasValue = endpoint[column];
 	return '<td>' +
 			'<div class="row">' +
 				'<div class="input-field col s12">' +
 					( !isId ?
-						'<input id="' + elementId +'" type="text" value="' + (entity[column] || '') + '" />' +
+						'<input id="' + elementId +'" type="text" value="' + (endpoint[column] || '') + '" />' +
 						'<label ' + (hasValue ? 'class="active"' : '') + 'for="' + elementId +'">' + column + '</label>'
 						:
-						'<span>' + entity[column] + '</span>'
+						'<span>' + endpoint[column] + '</span>'
 					) +
 				'</div>' +
 			'</div>' +
@@ -77,7 +77,7 @@ var getTableActions = function() {
 
 var newLine = function(instance) {
 	var newLine = '<tr>',
-		header = $('#entity-table thead > tr > th:not(:last-child)');
+		header = $('#endpoint-table thead > tr > th:not(:last-child)');
 	header.each(function() {
 		newLine += getTableColumn(instance, $(this).find('span').text());
 	});
@@ -85,17 +85,17 @@ var newLine = function(instance) {
 	return newLine + '</tr>';
 };
 
-var newEntityClick = function() {
-	var name = $('[name="entity-name"]').val();
-	if (!name) {
+var newEndpointClick = function() {
+	var url = $('[name="endpoint-name"]').val();
+	if (!url) {
 		return;
 	}
-	new Entitie({
-		name
-	}).save().then(function(entity) {
-		loadedEntities[entity.id] = entity;
-		$('#entities').append(getLi(entity));
-		$('[name="entity-name"]').val('').blur();
+	new Endpoint({
+		url
+	}).save().then(function(endpoint) {
+		loadedEndpoints[endpoint.id] = endpoint;
+		$('#endpoints').append(getLi(endpoint));
+		$('[name="endpoint-name"]').val('').blur();
 	});
 };
 
@@ -103,22 +103,22 @@ var editEndpoint = function(button) {
 	var li = button.parents('li'),
 		id = li.data('id');
 	li.addClass('active').siblings().removeClass('active');
-	selectedTable = loadedEntities[id];
-	$('#selected-table').html(li.find('.entity-name').text());
+	selectedTable = loadedEndpoints[id];
+	$('#selected-table').html(li.find('.endpoint-name').text());
 	var columns = selectedTable.properties || [];
 	var columnsText = '<tr>';
 	for (var i = 0; i < columns.length; i++) {
 		columnsText += getHeaderColumn(columns[i]);
 	}
 	columnsText += getHeaderActions() + '</tr>';
-	$('#entity-table thead').html(columnsText);
+	$('#endpoint-table thead').html(columnsText);
 
 	$.ajax({
 		type: 'GET',
 		url: '/api/' + selectedTable.name,
 		dataType: 'json'
 	}).then(function(instances) {
-		var table = $('#entity-table tbody');
+		var table = $('#endpoint-table tbody');
 		var lines = '';
 		for (var i = 0; i < instances.length; i++) {
 			lines += newLine(instances[i]);
@@ -128,9 +128,9 @@ var editEndpoint = function(button) {
 	$('select').material_select();
 };
 
-var removeEndpoint = function() {
-	var li = $(this).parents('li');
-	yawp(li.data('id')).destroy();
+var removeEndpoint = function(li) {
+	var id = li.data('id');
+	yawp(id).destroy();
 	li.remove();
 };
 
@@ -141,24 +141,24 @@ var addColumn = function() {
 		name: $('#column-name').val(),
 		defaultValue: $('#column-default').val()
 	});
-	yawp(selectedTable.id).update(selectedTable).then(function(updatedEntity) {
-		loadedEntities[selectedTable.id] = updatedEntity;
-		$('li[data-id="' + updatedEntity.id + '"] .edit-endpoint').click();
+	yawp(selectedTable.id).update(selectedTable).then(function(updatedEndpoint) {
+		loadedEndpoints[selectedTable.id] = updatedEndpoint;
+		$('li[data-id="' + updatedEndpoint.id + '"] .edit-endpoint').click();
 	});
 };
 
 var removeColumn = function(button) {
 	var th = button.parents('th');
 	selectedTable.properties.splice(th.index(), 1 );
-	yawp(selectedTable.id).update(selectedTable).then(function(updatedEntity) {
-		loadedEntities[selectedTable.id] = updatedEntity;
-		$('#entity-table').find('tbody tr').find('td:eq(' + th.index() + ')').remove();
+	yawp(selectedTable.id).update(selectedTable).then(function(updatedEndpoint) {
+		loadedEndpoints[selectedTable.id] = updatedEndpoint;
+		$('#endpoint-table').find('tbody tr').find('td:eq(' + th.index() + ')').remove();
 		th.remove();
 	});
 };
 
 var editLine = function(button) {
-	var header = $('#entity-table thead > tr > th:not(:last-child) span'),
+	var header = $('#endpoint-table thead > tr > th:not(:last-child) span'),
 		columnNumber = 0,
 		newObject = {},
 		tds = button.parents('tr').find('td input, td span');
@@ -199,29 +199,29 @@ var addNewLine = function() {
 		data: {},
 		dataType: 'json'
 	}).then(function(instance) {
-		$('#entity-table tbody').append(newLine(instance));
+		$('#endpoint-table tbody').append(newLine(instance));
 	});
 };
-Entities.init = function(params) {
-	var requests = [Renderer.requestPage('/entities/entity-list-item', 'entityListItem'),
-				Renderer.yawpRequest(Entitie.list(), 'entities')];
-	loadedEntities = {};
-	Renderer.openNewPage('/entities/entities-home', requests).then(function(result) {
-		var entities = result.it.entities;
-		for (var i = 0; i < entities.length; i++) {
-			loadedEntities[entities[i].id] = entities[i];
+Endpoints.init = function(params) {
+	var requests = [Renderer.requestPage('/endpoints/endpoint-list-item', 'endpointListItem'),
+				Renderer.yawpRequest(Endpoint.list(), 'endpoints')];
+	loadedEndpoints = {};
+	Renderer.openNewPage('/endpoints/endpoints-home', requests).then(function(result) {
+		var endpoints = result.it.endpoints;
+		for (var i = 0; i < endpoints.length; i++) {
+			loadedEndpoints[endpoints[i].id] = endpoints[i];
 		}
 
-		$('#new-entity').click(function() {
-			newEntityClick();
+		$('#new-endpoint').click(function() {
+			newEndpointClick();
 		});
-		$('#entities').on('click', '.edit-endpoint', function() {
+		$('#endpoints').on('click', '.edit-endpoint', function() {
 			editEndpoint($(this));
 		}).on('click', '.remove-endpoint', function() {
-			removeEndpoint($(this));
+			removeEndpoint($(this).parents('li'));
 		});
 
-		$('#entity-table').on('click', '.add-column', function() {
+		$('#endpoint-table').on('click', '.add-column', function() {
 			addColumn();
 		}).on('click', '.remove-column', function() {
 			removeColumn($(this));
@@ -235,4 +235,4 @@ Entities.init = function(params) {
 	});
 };
 
-module.exports = Entities;
+module.exports = Endpoints;
