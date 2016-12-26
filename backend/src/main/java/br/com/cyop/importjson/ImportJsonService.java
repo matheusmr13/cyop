@@ -112,7 +112,12 @@ public class ImportJsonService extends Feature {
 
 	private Version setupSettings(JsonObject json) {
 		JsonObject settings = json.get("api_config").getAsJsonObject();
-		Version version = Version.create(settings.get("version_url").getAsString());
+		String versionUrl = settings.get("version_url").getAsString();
+		if (yawp(Version.class).where("url","=",versionUrl).first() != null) {
+			throw new RuntimeException();
+		}
+
+		Version version = Version.create(versionUrl);
 		return yawp.save(version);
 	}
 }
