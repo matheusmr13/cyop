@@ -19,19 +19,19 @@ var config = {
 	},
 	module: {
 		loaders: [{
-				test: /\.js$/,
-				loader: 'babel',
-				query: {
-					stage: 0,
-					plugins: []
-				}
-    		}, {
-				test: /\.css$/,
-				loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-		},
-		{ test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
-
-           ]
+			test: /\.js$/,
+			loader: 'babel',
+			query: {
+				stage: 0,
+				plugins: []
+			}
+		}, {
+			test: /\.css$/,
+			loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+		}, {
+			test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+			loader: 'url-loader?limit=100000'
+		}]
 	},
 	plugins: [
 		new ExtractTextPlugin("styles.css", {

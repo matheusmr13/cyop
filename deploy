@@ -1,0 +1,16 @@
+#!/bin/bash -ex
+
+# clean
+cd backend/src/main/webapp/
+ls | grep -v WEB-INF | xargs rm -r
+
+# build frontend
+cd -
+cd frontend
+npm run clean && npm run build:webpack
+
+# copy files
+cp -r target/index.html target/*.js assets/* ../backend/src/main/webapp/
+
+
+
