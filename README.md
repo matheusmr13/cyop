@@ -91,4 +91,4 @@ Ps: In any of this ideas, Google App Engine will help you reducing your server c
  
  Yes, this is a lot of functionalities!
  
- Help CYOP to achieve this goals! **Contribute!**
+ Help CYOP to achieve this goals! **Be welcome to contribute!**
