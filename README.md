@@ -59,7 +59,7 @@ Ps: In any of this ideas, Google App Engine will help you reducing your server c
 
 ## Future
 
- ( not in order)
+ (not in order)
  - [x] Create simple API (GET, POST, PUT, DELETE)
  - [x] Simple tutorial to create first API
  - [ ] Screen to edit configurations
@@ -88,5 +88,7 @@ Ps: In any of this ideas, Google App Engine will help you reducing your server c
  - [ ] Create some default actions URL
   * Like: enable/disable, filter, etc
  
+ 
  Yes, this is a lot of functionalities!
+ 
  Help CYOP to achieve this goals! **Contribute!**
