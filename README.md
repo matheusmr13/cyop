@@ -15,7 +15,7 @@
 1. Create a project on Google App Engine on [Google Console](https://console.developers.google.com/)
 1. Clone this repo
 
-       $ git clone git@github.com:matheusmr13/cyop.git
+        $ git clone git@github.com:matheusmr13/cyop.git
 
 1. Execute:
 
