@@ -59,3 +59,34 @@ Ps: In any of this ideas, Google App Engine will help you reducing your server c
 
 ## Future
 
+ ( not in order)
+ - [x] Create simple API (GET, POST, PUT, DELETE)
+ - [x] Simple tutorial to create first API
+ - [ ] Screen to edit configurations
+  * Without knowing JSON, you can configure your API in a beautiful page
+ - [ ] Generate mock informations
+  * Choose some basic settings and generate data to your database
+ - [ ] Generate page with documentation
+  * With some infos granted when creating your API, a page that anyone can access will be available
+ - [ ] List property 
+  * List of any other property (eg: list of endpoints, list of integers, etc)
+ - [ ] Filter url
+  * Url like /version/endpoint {name : matheus}, where you can filter your list of data
+ - [ ] Enable/disable integrated tools (eg: login, email, fetch url, etc)
+  * If you like to use some already implemented tool, you can just enable it on some page
+ - [ ] Define type of scaling (automatic, basic, which type of instances)
+ - [ ] Import/export data
+  * Like a "database dump", but with your API (and data)
+ - [ ] Validators
+  * Define integer column range, text max chars, regex, etc
+ - [ ] CORS settings
+  * Define with domain can access your API if web
+ - [ ] Permissions
+  * Combined with authentication service, define which profile can see which API URL
+ - [ ] Manage your versions
+  * Edit your versions (don't just create new ones), backward compatibility
+ - [ ] Create some default actions URL
+  * Like: enable/disable, filter, etc
+ 
+ Yes, this is a lot of functionalities!
+ Help CYOP to achieve this goals! **Contribute!**
