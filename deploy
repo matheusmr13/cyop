@@ -2,6 +2,7 @@
 
 # clean
 cd backend/src/main/webapp/
+mkdir rm_success_trick
 ls | grep -v WEB-INF | xargs rm -r
 
 # build frontend
@@ -10,7 +11,23 @@ cd frontend
 npm run clean && npm run build:webpack
 
 # copy files
-cp -r target/index.html target/*.js assets/* ../backend/src/main/webapp/
+cp -r index.html assets/* ../backend/src/main/webapp/
+mkdir ../backend/src/main/webapp/static 
+cp target/styles.css target/compiled.js ../backend/src/main/webapp/static
 
+cd -
+cd backend/src/main/webapp/
+cat index.html | sed '/DEV_ONLY/,/END_DEV_ONLY/d' > index.tmp && mv index.tmp index.html
+cat WEB-INF/appengine-web.xml | sed "s/<application>.*<\/application>/<application>$(echo $1)<\/application>/" > WEB-INF/appengine-web.tmp && mv WEB-INF/appengine-web.tmp WEB-INF/appengine-web.xml
+
+cd -
+cd backend
+cat pom.xml | sed "s/<app\.id>.*<\/app\.id>/<app\.id>$(echo $1)<\/app\.id>/" > pom.tmp && mv pom.tmp pom.xml
+
+mvn appengine:update
+cat pom.xml | sed "s/<app\.id>.*<\/app\.id>/<app\.id><\/app\.id>/" > pom.tmp && mv pom.tmp pom.xml
+cd -
+cd backend/src/main/webapp
+cat WEB-INF/appengine-web.xml | sed "s/<application>.*<\/application>/<application><\/application>/" > WEB-INF/appengine-web.tmp && mv WEB-INF/appengine-web.tmp WEB-INF/appengine-web.xml
 
 
