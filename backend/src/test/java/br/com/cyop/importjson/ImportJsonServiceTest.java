@@ -23,7 +23,7 @@ public class ImportJsonServiceTest extends EndpointTestCaseBase {
 
 	@Test
 	public void importSimpleJsonTest() {
-		feature(ImportJsonService.class).importJson(getFile("simpleImportExample.json"));
+		yawp.saveWithHooks(ImportJson.create(getFile("simpleImportExample.json")));
 
 		List<Enumerator> createdEnumerators = yawp(Enumerator.class).list();
 		assertEquals(1, createdEnumerators.size());

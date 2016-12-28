@@ -20,4 +20,10 @@ public class ImportJson {
 	@Index
 	Date importDate;
 
+	public static ImportJson create(JsonObject file) {
+		ImportJson importJson = new ImportJson();
+		importJson.importDate = new Date();
+		importJson.json = file;
+		return importJson;
+	}
 }
