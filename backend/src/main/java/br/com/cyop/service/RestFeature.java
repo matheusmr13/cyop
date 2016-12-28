@@ -18,20 +18,9 @@ public class RestFeature extends Feature {
 		return yawp;
 	}
 
-	public <T> QueryBuilder<T> yawp(Class<T> clazz) {
-		return yawp().query(clazz);
-	}
-
-	public <T> QueryBuilder<T> yawpWithHooks(Class<T> clazz) {
-		return yawp().queryWithHooks(clazz);
-	}
-
 	public <T extends Feature> T feature(Class<T> clazz) {
 		yawp();
 		return super.feature(clazz);
 	}
 
-	public JsonElement toJson(String objAsString) {
-		return new JsonParser().parse(objAsString);
-	}
 }
