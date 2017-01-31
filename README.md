@@ -29,8 +29,7 @@
 
 1. When you have to test a proof of concept (aka POC) 
   * You can focus your time on the real challenge: test if people likes your solution/idea
-1. When you have to do some fast project (maybe a freelance job, or a project without complex backend)
-  * In most cases, when your client needs a freelance software (web or mobile), there is no need to complex server side logic developing
+1. When you have to do some fast project (maybe a freelance job, or a project without a complex backend)
 1. When you don't know any server side programming language and need to save your data on some place
   * You just need to know JSON and read some CYOP documentation to have your API (in future you will not even need to know JSON to configure your API)
 
