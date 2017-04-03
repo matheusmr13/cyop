@@ -28,19 +28,19 @@
 ## When should I use CYOP?
 
 1. When you have to test a proof of concept (aka POC) 
-  * You can focus your time on the real challenge: test if people likes your solution/idea
+   * You can focus your time on the real challenge: test if people likes your solution/idea
 1. When you have to do some fast project (maybe a freelance job, or a project without a complex backend)
 1. When you don't know any server side programming language and need to save your data on some place
-  * You just need to know JSON and read some CYOP documentation to have your API (in future you will not even need to know JSON to configure your API)
+   * You just need to know JSON and read some CYOP documentation to have your API (in future you will not even need to know JSON to configure your API)
 
 Ps: In any of this ideas, Google App Engine will help you reducing your server costs with [the daily free quotas](https://cloud.google.com/appengine/docs/quotas) and [the super duper cheap environment](https://cloud.google.com/appengine/pricing)
 
 ## When shouldn't I use CYOP?
 
 1. When your client needs very specific software and you need complex server side logic developing
-  * Maybe you will need to craft some backend that fits what he really needs
+   * Maybe you will need to craft some backend that fits what he really needs
 1. When you need some feature that CYOP doesn't has 
-  * **Or you can contribute and help CYOP grow**
+   * **Or you can contribute and help CYOP grow**
   
 ## Running local
 
